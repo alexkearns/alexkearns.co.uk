@@ -1,0 +1,26 @@
+---
+title: Showing your AWSume AWS CLI profile in ZSH
+date: '2021-09-17'
+tags: ['awsume', 'zsh']
+draft: false
+summary: By setting the RPROMPT variable, learn how to configure ZSH so it shows the profile you have assumed via AWSume
+category: Hot Tip
+---
+
+[AWSume](https://awsu.me/) is a brilliant command line utility for assuming roles in your AWS accounts and setting the relevant environment variables for the CLI, or local scripts, to work. You're able to run commands like `awsume my-profile` and it'll use the config and credentials files found in the `~/.aws` directory (the same as the AWS CLI) to get a set of temporary credentials for a role (or set the permanent credentials for a user).
+
+However, the one thing that my current ZSH theme lacks is the ability to show what AWS profile I've currently assumed. For reference, I'm using the [cloud theme](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#cloud) for my shell.
+
+I'll assume you've got AWSume installed and set up at this point - this post isn't going to cover that. It's a fairly simple process to get your profile showing up on the right of your prompt. Make sure that your ZSH theme supports values in `RPROMPT`. An easy way to test it is running the following and seeing if anything shows up:
+```bash
+RPROMPT="MyTestValue"
+```
+
+All being well, your theme does support it and you can carry on with this tutorial. The next step is to add the following to the bottom of your `~/.zshrc` file. The first line tells ZSH that it should re-evaluate the prompt after each command is run. The second does a number of things. The first part `${AWSUME_PROFILE:+` defines that we want to set a value only when the `AWSUME_PROFILE` variable is unset or has a null value. The second part of the expression `<aws:$AWSUME_PROFILE>}` defines the value that we want to return if the condition is met. This would result in the prompt showing as `<aws:my-profile-name>`, you could customise the prefix and suffix for `$AWSUME_PROFILE` to display it how you desire. It's important that you use single quotes rather than double quotes to ensure it gets re-evaluated each time!
+
+```bash
+setopt PROMPT_SUBST
+RPROMPT='${AWSUME_PROFILE:+<aws:$AWSUME_PROFILE>}'
+```
+
+Once this has been added, run `source ~/.zshrc` and you're good to go. Next time you use AWSume to assume a CLI profile it'll appear on the right!
