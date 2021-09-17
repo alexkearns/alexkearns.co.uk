@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import siteMetadata from '@/data/siteMetadata'
 import projectsData from '@/data/projectsData'
 import Card from '@/components/Card'
