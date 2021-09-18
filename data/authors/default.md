@@ -1,6 +1,6 @@
 ---
 name: Alex Kearns
-avatar: /static/images/profile.jpg
+avatar: /assets/images/profile.jpg
 occupation: Solution Engineer Consultant
 company: Inawisdom
 email: alex@alexkearns.co.uk
