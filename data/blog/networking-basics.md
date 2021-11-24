@@ -1,0 +1,56 @@
+---
+title: VPCs, Subnets, Security Groups, oh my!
+date: '2021-11-25'
+tags: ['aws', 'networking', 'fundamentals']
+draft: true
+summary: Grasp the basics of networking in AWS. This is the article I wish I'd had when I started out!
+---
+
+# At a high level
+Regions are the uppermost construct that I'll talk about in this article. An AWS region is a set of data centers that are geographically widely distributed from other regions. An example of an AWS region is `eu-west-1` which is located in Dublin, Ireland. In the context of designing architectures in AWS, regions are distinct enough that a large-scale outage should not take more than one out at a time. For example, if a natural disaster occurred that wiped out the `eu-west-1` region in Ireland, the `eu-west-2` region in London would likely be unaffected. This allows the building of multi-region applications where operational resiliency is of upmost importance.
+
+Within an AWS region, the concept of Availability Zones exist. These are commonly known as AZs. A region contains a number of AZs; they are denoted by a letter that follows a region name (e.g. `eu-west-1a` and `eu-west-1b`). AZs provide a less complicated way to architect an application for high levels of resiliency, however it is not possible to protect against the risk of an entire region suffering an outage. An AZ is a data center in the general geographic area of the region (remember how a region is a set of data centers). Crucially, the location of these data centers are close enough to limit network latency (how long it takes for data to travel across the network) but far enough apart that localised outages are protected against (e.g. misconfiguration, flooding, power outages etc.)
+
+Two examples of how regions and AZs can be used to architect for high availability are as follows:
+- A mission critical application that must not suffer extended outages could be deployed into both `eu-west-1` and `us-east-1`. In the event of the primary region suffering an outage, traffic can be directed to the secondary. There would likely be a performance hit due to the increased latency, but the application would still function. It is extremely unlikely that an event could take out two regions that are 3000+ miles apart from each other.
+- An application can suffer outages in extreme circumstances but should be resilient enough to handle events localised to a data center. This application could be deployed into a single region (e.g. `eu-west-1`), however it would be in multiple availability zones to ensure that traffic can be distributed and redirected to healthy infrastructure.
+
+# VPCs
+Let's get into it. VPCs. Virtual Private Clouds. That's all they are, they're a way to create a private network within an AWS region where you can deploy infrastructure. When setting up a VPC, a CIDR network range is required to tell AWS which private IPs should be available for infrastructure to be issued. Being completely truthful, it took me a while to get my head around CIDR notation. One website that helped me was this [visual subnet calculator](https://www.davidc.net/sites/default/subnets/subnets.html) which allows for really easy splitting up of networks and seeing exactly how many IP addresses will be available for a given range. An example CIDR range is `10.0.0.0/16` which corresponds to a maximum of 65534 IP addresses available (minus a few that AWS reserve for specific purposes - outside the scope of this article).
+
+One crucial thing to remember is that a VPC can only exist within one region and is associated with that region, not an availability zone.
+
+# Subnets
+Subnets can be simply thought of as sub-networks. Subnets get placed in an AZ and form the crux of how we design a highly available application. Much like VPCs, subnets are created with a CIDR range to define the IPs available within them. The CIDR range that a subnet is created with must form part of the range that the VPC has made available. For example, an application that is deployed across two availability zones could have the following set up:
+
+- `eu-west-1` VPC with a CIDR range of `10.0.0.0/24`
+- `eu-west-1a` Subnet with a CIDR range of `10.0.0.0/25`
+- `eu-west-1b` Subnet with a CIDR range of `10.0.0.128/25`
+
+An architecture like this would allow for a reasonably high degree of availability whilst keeping the networking simple.
+
+Two concepts to be familiar with are public and private subnets. The initial set up of the subnet does not determine whether it is public or private, rather whether it is accessible via the internet or not. If the subnet is accessible via the internet, it is considered public. If not, then private.
+
+## Route tables
+Route tables are attached to subnets and are responsible for directing network traffic from within the subnet to other destinations on the network. Within AWS these other locations could be internet or NAT gateways, PrivateLink endpoints, peering connections among others. Whilst a route table does come with a VPC by default, it is possible to create additional custom route tables to associate with specific subnets. Routes are evaluated by finding the most specific rule, however if there are conflicts then the priorities detailed [here](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html#route-tables-priority) apply.
+
+# Security
+Security of networks is another area that is just as important to consider as high availability. Two mechanisms for implementing network security are Network Access Control Lists (NACLs) and Security Groups.
+
+## NACLs
+NACLs exist at the subnet level and are attached to one or more subnets. They are stateless, meaning that rules need to exist in both inbound and outbound lists for a request to be successfully returned. Rules are evaluated from lowest numbered to highest. Rules can be allow/deny statements which allows for explicitly blocking an IP range.  
+
+## Security Groups
+Security groups differ to NACLs in a number of ways. Firstly, they are attached to a network interface rather than a subnet. This could be an EC2 instance, RDS instance, Lambda function running inside a VPC etc. This allows for more granular controls withing a subnet, such as limiting which resources can communicate with others. Secondly, they block everything by default and can only implement allow rules. This means that an explicit IP range could not be blocked. Finally, security groups are stateful. This means that if a request is made to a resource and said request is allowed by the inbound rule, the response will automatically be allowed back out (unlike NACLs).
+
+# Connecting to the internet
+Of course, most applications require some form of internet access now-a-days. Whether this internet access is inbound, outbound or both is up to you to decide what's needed for your application. Below are two ways to implement different patterns for internet access.
+
+## Inbound and outbound (public subnets)
+For subnets where inbound public access is required, an Internet Gateway is used. Internet Gateways are attached to a VPC and then the `0.0.0.0/0` route in the subnet's route table is pointed to the Internet Gateway. This then allows public networks (e.g. the internet) to connect to resources in the subnet (providing they have been issued a public IP address). This then becomes known as a public subnet.
+
+## Outbound only (private subnets)
+NAT gateways (alternatively implemented as NAT instances) are used when you want a subnet to have outbound internet access but not inbound internet access. This could be used for situations where a server needs internet access for patching but should not be accessible to the public. This is also known as a private subnet. To implement this: an Internet Gateway is attached to the VPC, the NAT gateway is deployed into the public subnet and the route table of the private subnet is updated to point the `0.0.0.0/0` route to the NAT gateway.
+
+# Conclusion
+In summary, I hope that this article has provided a good grounding on networking within AWS and how applications can make use of the massive scale of the cloud when the time that is right. You should have an understanding of how to securely set up networking at a basic level that can be taken further as your understanding and requirement progresses.
