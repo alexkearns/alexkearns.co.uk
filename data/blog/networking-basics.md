@@ -1,8 +1,8 @@
 ---
 title: VPCs, Subnets, Security Groups, oh my!
-date: '2021-11-25'
+date: '2021-12-17'
 tags: ['aws', 'networking', 'fundamentals']
-draft: true
+draft: false
 summary: Grasp the basics of networking in AWS. This is the article I wish I'd had when I started out!
 ---
 
