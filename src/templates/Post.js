@@ -4,7 +4,7 @@ import Layout from "../components/Layout"
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import Header from "../components/Header";
 
-const Article = ({data}) => {
+const Post = ({data}) => {
     const { body } = data.mdx
     const { title } = data.mdx.frontmatter
     return(
@@ -19,7 +19,7 @@ const Article = ({data}) => {
     )
 }
 
-export default Article
+export default Post
 
 export const query = graphql`
   query ArticleQuery($id: String) {

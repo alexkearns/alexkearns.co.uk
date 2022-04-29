@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
 
-const BlogItem = ({ title, slug, date, excerpt, category }) => {
+const PostItem = ({ title, slug, date, excerpt }) => {
   return (
     <div className={"border-t border-gray-300 py-12"}>
       <Link to={slug} className={"flex justify-start items-start"}>
@@ -25,4 +25,4 @@ const BlogItem = ({ title, slug, date, excerpt, category }) => {
   );
 };
 
-export default BlogItem;
+export default PostItem;
