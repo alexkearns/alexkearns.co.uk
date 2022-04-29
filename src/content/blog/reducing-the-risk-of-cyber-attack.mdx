@@ -1,0 +1,90 @@
+---
+title: Reducing the risk of cyber attacks against applications hosted in AWS
+date: '2022-02-22'
+tags: ['security', 'aws']
+---
+About a month ago, I saw an [article on the NCSC blog](https://www.ncsc.gov.uk/news/uk-organisations-encouraged-to-take-action-around-ukraine-situation) (National Cyber Security Centre) that prompted me to write this in response, focusing on how to interpret the actionable points that they have made and apply them to workloads that run within AWS.
+
+When running applications inside AWS, security responsibilities come down to the [Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/). This sets out exactly what AWS are responsible for and what you as the customer are responsible for. Ultimately, it boils down to AWS being responsible for "security of the cloud" whereas you are responsible for "security in the cloud". For example, this would mean that you're responsible for making sure that your application isn't vulnerable to SQL injection attacks, but AWS are responsible for the physical security of the datacentre that houses the server your application runs on.
+
+We all know that security is a massive consideration in architecting any application, potentially going as far as businesses feeling discouraged from using the cloud due to not understanding its security fully or perceiving it to be less secure.
+
+I want to show with this article that AWS stands you on good ground when it comes to securing an application. If it can accommodate all the recommendations that the NCSC make then it's good enough for me!
+
+# Patching systems
+
+Let's focus on two use-cases for when you might think about patching the software on which your application runs. The first is a serverless application running as a Lambda function and the second is an application running on an EC2 instance (virtual machine for non-AWS folk).
+
+## Lambda function
+
+Most of the time, you don't need to worry about patching the underlying software for a Lambda function. If you deploy Lambda functions in the 'traditional' way where a managed runtime (e.g. Python 3.9) is selected and a ZIP file with your application source code in is uploaded, then AWS take care of patching the managed runtime and the OS that it runs on. Great news!
+
+If you opt to use the Docker image functionality of Lambda functions, the story changes a little. AWS still take care of patching the underlying OS for you, however anything inside the Docker image becomes your responsibility. This means that even if you use one of AWS' official first-party images as your base, it won't automatically get updates unless you re-build the image and re-deploy it to the function.
+
+All in all, a pretty good showing from Lambda!
+
+## EC2 instance
+
+Managing the patching of an EC2 instance is a bit of a different story. AWS will take care of patching the hardware as part of the Shared Responsibility Model, but much above that becomes your responsibility. This means that when you opt to start an instance (based on Linux or Windows for example), you need to think about how you keep that operating system up to date.
+
+Fortunately, there's an easy solution for this. A service exists called [AWS Systems Manager Patch Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html) which - well, unsurprisingly manages patches. All that's required to use this is to install an agent on the EC2 instance known as the 'SSM Agent' (this does open the door for other AWS Systems Manager functionality too). Installing this agent makes an instance a 'managed node' which then allows you to view at a birds-eye view which instances in your fleet are up to date with patches, as well as instructing Systems Manager to apply said patches.
+
+# Improving access controls and enabling multi-factor authentication
+
+I cannot emphasise enough how crucial MFA is. There are very, very few situations where a human user could not make use of either virtual or hardware MFA devices. The one place that MFA is non-negotiable in my mind is on the account's root user. There is nothing that this account cannot do, including locking you out of the account and holding your data ransom. If root is compromised, you're in trouble.
+
+Access to an AWS account on a day-to-day basis should absolutely not be through the root account. Users should have independent accounts to enable traceability for who has carried out for what actions. If all your developers share a user called 'Developer' then how do you identify who's gone in and deleted all your production data maliciously?
+
+One of the most common security holes I see is over-privileged access policies. The principle of least privilege is a real thing, it should be followed at every opportunity. All it means is that an IAM principal (role/user) has more permissions than they need. If they don't need access to it, why risk it?
+
+Finally, I wanted to mention an alternative approach to access control within AWS that may make administration easier. [AWS SSO](https://aws.amazon.com/single-sign-on/) is a way to "centrally manage access to multiple AWS accounts or applications". SSO can use stores such as Active Directory or Okta (among others) as the identity store for access to AWS. This makes joiners/leavers process much easier, and you can even automatically provision groups within AWS based on groups in your AD. SSO allows administrators to assign permission sets (equivalent to IAM roles) to a principal (user or group) for a particular account. Doing this all from one place in addition to being able to drive group memberships from AD makes the admin process so much easier.
+
+# Implementing an effective incident response plan
+
+Incident response plans are not a new concept, they existed before AWS was even a thing.
+
+AWS doesn't have a one-size fits all service for incident response, rather it has specialist services to perform each individual task well. Rather than regurgitate what AWS say about IR, [here is their whitepaper](https://docs.aws.amazon.com/en_us/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.pdf?did=wp_card&trk=wp_card) all about the subject. It's a long read, but if you're serious about implementing an effective plan for IR then it's a worthwhile read.
+
+One service that I do want to mention as a key part of incident response is [Amazon Detective](https://aws.amazon.com/detective/?c=sc&sec=srv). This service is designed to help identify the root cause of suspicious activity or potential threat. It does this by analysing logs from a plethora of locations, you can give it as much or as little as you want - naturally the more, the better. Amazon Detective can even build visual representations of issues to speed up the process and decrease the MTTR (mean time to recovery).
+
+# Checking that backups and restore mechanisms are working
+
+There are two services I want to talk about here.
+
+The first is [AWS Backup](https://aws.amazon.com/backup/?whats-new-cards.sort-by=item.additionalFields.postDateTime&whats-new-cards.sort-order=desc). As you might expect, this service allows you to set up backup policies for a number of different resources including EC2 instances, RDS databases, DynamoDB tables and most recently S3 buckets. Using a service like this makes it far easier to meet any legal or operational requirements that you might have. It is incredibly feature rich, enabling you to set parameters such as encryption, lifecycle rules and even transition backups to a cheaper cold storage after a given number of days. All of this is automated and can be applied consistently to a group of resources using tags, or alternatively you can manage it all centrally and hand-pick the resources that should be backed up.
+
+The second is [AWS Elastic Disaster Recovery](https://aws.amazon.com/disaster-recovery/). The idea of this service is that it allows you to recover your cloud environment to a second region when disaster strikes without the need to run a hot DR environment all the time (reducing the cost). It works by continually replicating data to your DR region (without running the full infrastructure) so as soon as you need to switch over, all the data is already there. Crucially, Elastic Disaster Recovery supports running "non-disruptive recovery and fallback drills" as part of its testing suite to give you confidence that should you ever need it, the plan and systems you have in place will do their job.
+
+# Ensuring that online defences are working as expected
+
+There isn't a service to test all of your online defences in one go. As we've seen (and will continue to see) in this blog post, there are lots of ways to continually monitor potential vulnerabilities.
+
+AWS do recommend that you run simulations to test that monitoring tools are working as you expect them to as well as that your application is meeting the security standard that you desire. 
+
+In order to do this, some guidance is provided in the [Security pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/simulate.html) of the AWS Well Architected Framework around how you might plan said simulations. [Incident Response Runbook templates](https://github.com/aws-samples/aws-incident-response-playbooks) are also provided as a base for where you might want to begin planning a test of your defences.
+
+**One really, really, really important thing to note is that AWS have a strict [security testing policy](https://aws.amazon.com/security/penetration-testing/) which details what you can and cannot do without informing them first.**
+
+# Keeping up to date with the latest threat and mitigation information
+
+AWS isn't invincible. Every provider discovers security flaws - judging them on how they respond to it is what matters. 
+
+AWS publishes a [public feed of security bulletins](https://aws.amazon.com/security/security-bulletins/?card-body.sort-by=item.additionalFields.bulletinId&card-body.sort-order=desc&awsf.bulletins-flag=*all&awsf.bulletins-year=*all) which contains details of any security bugs that have been discovered in AWS services themselves. Of course, this doesn't include your own application, just the underlying services that it may use.
+
+There are a trio of services that help you to monitor how your AWS application is performing against the latest security standards. These are [AWS Security Hub](https://aws.amazon.com/security-hub/?c=sc&sec=srv), [Amazon GuardDuty](https://aws.amazon.com/guardduty/?c=sc&sec=srv) and [Amazon Inspector]. Let's look at them in a bit more detail. 
+
+GuardDuty is a managed threat detection service that continually monitors your AWS account, identifying threats using: machine learning, anomaly detection, integrated threat intelligence. GuardDuty can be integrated with other AWS services such as Detective (that we mentioned earlier) to find the root-cause of a threat.
+
+Inspector is used for vulnerability management and monitoring and can be used only on workloads running on EC2 instances or within the ECS service. Rather than looking at your cloud configuration as a whole, it looks at individual pieces of infrastructure and searches for vulnerabilities in the software being run. A recent example would be the Log4j vulnerability, Amazon Inspector would have identified those instances that are running an affected version once the CVE was published. Inspector does this analysis using the same SSM agent that Patch Manager uses, which means that patching those vulnerabilities is a much more manageable task.
+
+Security Hub is the final of the trio. This service performs two main functions. The first is that it collates findings from the other security services (such as GuardDuty and Inspector) into one central place, making it a lightweight cloud replacement for a SIEM. The second is that it runs its own best practice checks over your account against some industry standard frameworks (e.g. CIS Foundations, PCI DSS).
+
+Any of these services would add significant value to your AWS security posture, when combined the security services show their real potential to save you time whilst making you more secure.
+
+# Conclusion
+
+In conclusion, in my opinion it is very clear that developing secure workloads on AWS is not just possible but easier than running on premise (with probably a lower TCO). I hope that this has given some useful insights into how you can utilise various security tools on AWS.
+
+All of AWS' security offerings can be found listed on [this](https://aws.amazon.com/products/security/?nc=sn&loc=2) page.
+
+Any questions or comments please reach out to me on Twitter @alex_kearns.

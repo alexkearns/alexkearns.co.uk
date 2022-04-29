@@ -1,26 +1,62 @@
 module.exports = {
   siteMetadata: {
-      title: `alexkearns.co.uk`,
-    siteUrl: `https://www.yourdomain.tld`
+    title: `alexkearns.co.uk`,
+    siteUrl: `https://www.alexkearns.co.uk`
   },
-  plugins: ["gatsby-plugin-image", "gatsby-plugin-react-helmet", "gatsby-plugin-sitemap", {
-    resolve: 'gatsby-plugin-manifest',
-    options: {
-      "icon": "src/images/icon.png"
-    }
-  }, "gatsby-plugin-mdx", "gatsby-plugin-sharp", "gatsby-transformer-sharp", {
-    resolve: 'gatsby-source-filesystem',
-    options: {
-      "name": "images",
-      "path": "./src/images/"
+  plugins: [
+    "gatsby-plugin-postcss",
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-sitemap",
+    // {
+    //   resolve: "gatsby-plugin-manifest",
+    //   options: {
+    //     "icon": "src/images/icon.png"
+    //   }
+    // },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        "path": `${__dirname}/src/images/`
+      }
     },
-    __key: "images"
-  }, {
-    resolve: 'gatsby-source-filesystem',
-    options: {
-      "name": "pages",
-      "path": "./src/pages/"
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        "path": `${__dirname}/src/content/blog/`,
+        "name": 'blog'
+      }
     },
-    __key: "pages"
-  }]
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        "path": `${__dirname}/src/content/talks/`,
+        "name": 'talks'
+      }
+    },
+    {
+      resolve: `gatsby-plugin-sharp`,
+      options: {
+        defaults: {
+          quality: 70,
+          formats: ['auto', 'webp', 'avif'],
+          placeholder: 'blurred',
+        },
+      },
+    },
+    `gatsby-remark-images`,
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 1200,
+            },
+          },
+        ],
+      },
+    },
+    "gatsby-transformer-sharp",
+  ]
 };
