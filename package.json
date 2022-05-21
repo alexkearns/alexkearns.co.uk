@@ -1,11 +1,13 @@
 {
-  "name": "alexkearns.co.uk",
+  "name": "unfog.co.uk",
   "version": "1.0.0",
   "private": true,
-  "description": "alexkearns.co.uk",
+  "description": "unfog.co.uk",
   "author": "Alex Kearns",
   "keywords": [
-    "gatsby"
+    "unfog",
+    "cloud",
+    "aws"
   ],
   "scripts": {
     "develop": "gatsby develop",
@@ -27,9 +29,12 @@
     "gatsby-plugin-sharp": "^4.6.0",
     "gatsby-plugin-sitemap": "^5.6.0",
     "gatsby-remark-images": "^6.6.0",
+    "gatsby-remark-prismjs": "^6.14.0",
     "gatsby-source-filesystem": "^4.6.0",
+    "gatsby-transformer-remark": "^5.14.0",
     "gatsby-transformer-sharp": "^4.6.0",
     "postcss": "^8.4.5",
+    "prismjs": "^1.28.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",

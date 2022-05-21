@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `alexkearns.co.uk`,
+    title: `Alex Kearns`,
     siteUrl: `https://www.alexkearns.co.uk`
   },
   plugins: [
@@ -23,14 +23,14 @@ module.exports = {
       resolve: "gatsby-source-filesystem",
       options: {
         "path": `${__dirname}/src/content/blog/`,
-        "name": 'blog'
+        "name": "blog"
       }
     },
     {
       resolve: "gatsby-source-filesystem",
       options: {
         "path": `${__dirname}/src/content/talks/`,
-        "name": 'talks'
+        "name": "talks"
       }
     },
     {
@@ -38,25 +38,32 @@ module.exports = {
       options: {
         defaults: {
           quality: 70,
-          formats: ['auto', 'webp', 'avif'],
-          placeholder: 'blurred',
-        },
-      },
+          formats: ["auto", "webp", "avif"],
+          placeholder: "blurred"
+        }
+      }
     },
     `gatsby-remark-images`,
     {
       resolve: `gatsby-plugin-mdx`,
       options: {
+        extensions: [".mdx", ".md"],
         gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              classPrefix: "language-"
+            }
+          },
           {
             resolve: `gatsby-remark-images`,
             options: {
-              maxWidth: 1200,
-            },
-          },
-        ],
-      },
+              maxWidth: 1200
+            }
+          }
+        ]
+      }
     },
-    "gatsby-transformer-sharp",
+    "gatsby-transformer-sharp"
   ]
 };

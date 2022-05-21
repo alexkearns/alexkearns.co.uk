@@ -57,7 +57,7 @@ const PostItemList = ({data, pageContext}) => {
     <Layout>
       <Header title={"All my ramblings."}/>
       <div className={"container"}>
-        <div className={"text-lg uppercase mb-3"}>
+        <div className={"text-lg -mt-4 sm:-mt-10 mb-6"}>
           Page {pageContext.currentPage} of {pageContext.numPages}
         </div>
         <div className={"space-y-6"}>

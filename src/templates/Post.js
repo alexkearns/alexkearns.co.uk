@@ -11,7 +11,7 @@ const Post = ({data}) => {
       <Layout>
         <div>
             <Header title={title} center={true}/>
-            <div className={"prose prose-img:w-full mx-auto mt-6"}>
+            <div className={"px-8 sm:px-0 prose prose-img:w-full mx-auto mt-6"}>
               <MDXRenderer>{body}</MDXRenderer>
             </div>
         </div>
