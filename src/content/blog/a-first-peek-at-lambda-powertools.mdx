@@ -29,7 +29,7 @@ a way to debug where this request might've gone wrong along the road is incredib
 The code snippets below shows what needs to be added to the SAM template and Lambda function Python script in order to get 
 a minimal example up and running for tracing with X-Ray.
 
-```yaml {4, 7}
+```yaml
 HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -38,7 +38,7 @@ HelloWorldFunction:
         Variables:
           POWERTOOLS_SERVICE_NAME: lambda-powertools-demo-hello-world
 ```
-```python {1, 3, 6}
+```python
 from aws_lambda_powertools import Tracer
 
 tracer = Tracer()
@@ -56,7 +56,7 @@ def lambda_handler(event, context):
 
 Once requests start running through the function, X-Ray will generate traces such as the one below. 
 
-![TracerScreenshot](../images/a-first-peek-at-lambda-powertools/tracer.png)
+![TracerScreenshot](../../images/a-first-peek-at-lambda-powertools/tracer.png)
 
 ## Logger
 
@@ -67,7 +67,7 @@ the library will take care of writing to CloudWatch in a consistent format to ma
 
 The snippets below show the basic steps required to get logging hooked up within your Lambda.
 
-```yaml {6-7}
+```yaml
 HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -76,7 +76,7 @@ HelloWorldFunction:
           POWERTOOLS_SERVICE_NAME: lambda-powertools-demo-hello-world
           LOG_LEVEL: INFO
 ```
-```python {1, 3, 6}
+```python
 from aws_lambda_powertools import Logger
 
 logger = Logger()
@@ -98,7 +98,7 @@ the `logger.info` call have been written in a consistent format which makes it p
 Log Insights - a service built on top of CloudWatch Logs that enables the understanding of logs through a structured query 
 language.
 
-![LoggerScreenshot](../images/a-first-peek-at-lambda-powertools/logger.png)
+![LoggerScreenshot](../../images/a-first-peek-at-lambda-powertools/logger.png)
 
 ## Event Source Data Classes
 
@@ -109,7 +109,7 @@ They do this by providing documented, typed classes for a variety of events that
 that when developing against these events, you don't need to spend all the time with your head in documentation trying to 
 figure out what parameters get sent and whether they are serialised or not.
 
-```python {3-6, 12, 15-16}
+```python
 import json
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.data_classes import (
