@@ -3,6 +3,7 @@ import Layout from "../components/Layout"
 import Header from "../components/Header"
 import { graphql, useStaticQuery } from "gatsby";
 import PostItem from "../components/posts/PostItem";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   const items = useStaticQuery(graphql`
@@ -43,6 +44,11 @@ const Home = () => {
 
   return(
     <Layout>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Alex Kearns</title>
+        <link rel="canonical" href="https://www.alexkearns.co.uk" />
+      </Helmet>
       <Header title={"Latest posts."}/>
       <div className={"container"}>
         <div className={"space-y-6"}>

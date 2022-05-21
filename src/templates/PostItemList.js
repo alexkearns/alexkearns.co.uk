@@ -3,6 +3,7 @@ import Layout from "../components/Layout"
 import Header from "../components/Header"
 import { graphql, Link } from "gatsby";
 import PostItem from "../components/posts/PostItem";
+import { Helmet } from "react-helmet";
 
 export const postListQuery = graphql`
   query postListQuery($skip: Int!, $limit: Int!) {
@@ -55,6 +56,11 @@ const PostItemList = ({data, pageContext}) => {
 
   return(
     <Layout>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>All posts</title>
+        <link rel="canonical" href="https://www.alexkearns.co.uk" />
+      </Helmet>
       <Header title={"All my ramblings."}/>
       <div className={"container"}>
         <div className={"text-lg -mt-4 sm:-mt-10 mb-6"}>
