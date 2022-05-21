@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
   return (
     <div className={"min-h-screen flex flex-col"}>
       <nav className="container flex justify-between items-center py-10">
-        <div className={"p-2 text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-orange-700"}>
+        <div className={"py-2 text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-orange-700"}>
           <Link to="/">Alex Kearns</Link>
         </div>
         <ul className="flex leading-5">
