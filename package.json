@@ -1,12 +1,12 @@
 {
-  "name": "unfog.co.uk",
+  "name": "alexkearns.co.uk",
   "version": "1.0.0",
   "private": true,
-  "description": "unfog.co.uk",
+  "description": "alexkearns.co.uk",
   "author": "Alex Kearns",
   "keywords": [
-    "unfog",
-    "cloud",
+    "blog",
+    "alex kearns",
     "aws"
   ],
   "scripts": {
