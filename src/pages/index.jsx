@@ -17,10 +17,8 @@ import image2 from '@/images/photos/image-2.jpg'
 import image3 from '@/images/photos/image-3.jpg'
 import image4 from '@/images/photos/image-4.jpg'
 import image5 from '@/images/photos/image-5.jpg'
-import logoAirbnb from '@/images/logos/airbnb.svg'
-import logoFacebook from '@/images/logos/facebook.svg'
+import logoAws from '@/images/logos/aws.png'
 import logoPlanetaria from '@/images/logos/planetaria.svg'
-import logoStarbucks from '@/images/logos/starbucks.svg'
 import { generateRssFeed } from '@/lib/generateRssFeed'
 import { getAllArticles } from '@/lib/getAllArticles'
 import { formatDate } from '@/lib/formatDate'
@@ -154,7 +152,7 @@ function Achievements() {
     {
       issuer: 'Amazon Web Services',
       title: 'AWS Ambassador',
-      logo: logoPlanetaria,
+      logo: logoAws,
       start: '2022',
       end: {
         label: 'Present',
@@ -164,7 +162,7 @@ function Achievements() {
     {
       issuer: 'Amazon Web Services',
       title: 'AWS Community Builder',
-      logo: logoPlanetaria,
+      logo: logoAws,
       start: '2022',
       end: {
         label: 'Present',
@@ -183,7 +181,7 @@ function Achievements() {
         {achievements.map((achievement, achievementIndex) => (
           <li key={achievementIndex} className="flex gap-4">
             <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
-              <Image src={achievement.logo} alt="" className="h-7 w-7" unoptimized />
+              <Image src={achievement.logo} alt="" className="h-7 w-7 rounded-full" unoptimized />
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">Title</dt>
@@ -236,14 +234,14 @@ function Resume() {
     {
       company: 'BT',
       title: 'Cloud Engineer',
-      logo: logoAirbnb,
+      logo: logoPlanetaria,
       start: '2020',
       end: '2021',
     },
     {
       company: 'Software Developer',
       title: 'ubisend',
-      logo: logoFacebook,
+      logo: logoPlanetaria,
       start: '2017',
       end: '2020',
     }
