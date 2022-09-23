@@ -41,10 +41,10 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>About - Spencer Sharp</title>
+        <title>About - Alex Kearns</title>
         <meta
           name="description"
-          content="I’m Spencer Sharp. I live in New York City, where I design the future."
+          content="I’m Alex Kearns. I live in the UK, where I build data platforms on AWS to enable businesses to extract insights from their most valuable asset."
         />
       </Head>
       <Container className="mt-16 sm:mt-32">
@@ -60,59 +60,56 @@ export default function About() {
             </div>
           </div>
           <div className="lg:order-first lg:row-span-2">
-            <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-              I’m Spencer Sharp. I live in New York City, where I design the
-              future.
+            <h1 className="text-zinc-800 dark:text-zinc-100">
+              <span className="text-4xl sm:text-5xl font-bold block tracking-tight">Hi! I’m Alex.</span>
+              <span className="text-2xl font-medium block mt-2">I live in the UK, where I build data platforms on AWS to enable businesses to extract insights from their most valuable asset.</span>
             </h1>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
               <p>
-                I’ve loved making things for as long as I can remember, and
-                wrote my first program when I was 6 years old, just two weeks
-                after my mom brought home the brand new Macintosh LC 550 that I
-                taught myself to type on.
+                I’ve always been a bit of a geek. Interested in computers from an early age, whether it was in relation to software 
+                or hardware. I remember writing my first HTML at school and being hooked on the process of writing code that changed 
+                what appeared on the screen. I also remember being fascinated at how computers worked inside, taking great pleasure in 
+                dismantling the family computer. I'm not sure my parents remember it so fondly, given that I could not put it back together 
+                again!
               </p>
               <p>
-                The only thing I loved more than computers as a kid was space.
-                When I was 8, I climbed the 40-foot oak tree at the back of our
-                yard while wearing my older sister’s motorcycle helmet, counted
-                down from three, and jumped — hoping the tree was tall enough
-                that with just a bit of momentum I’d be able to get to orbit.
+                I think it was always clear to me that I would end up working in tech in some way, shape or form. It took a little while 
+                to work out exactly what it was - I began with a software development role during, and for the years immediately following, 
+                my studies at university. In this role I had some exposure to AWS, primarily due to it being a small team and someone having 
+                to do it! I began to cut my teeth on the high level concepts that I'd need as a base.
               </p>
               <p>
-                I spent the next few summers indoors working on a rocket design,
-                while I recovered from the multiple surgeries it took to fix my
-                badly broken legs. It took nine iterations, but when I was 15 I
-                sent my dad’s Blackberry into orbit and was able to transmit a
-                photo back down to our family computer from space.
+                Through self study as well as increased responsibility at work, I moved to BT to work specifically on AWS projects. The long 
+                term plan was for me to become a consultant, however due to delays during the pandemic I spent my time there working on 
+                internal projects. Specifically, these projects were around cloud adoption within the business as well as the governance 
+                required for it to be used on sensitive projects.
               </p>
               <p>
-                Today, I’m the founder of Planetaria, where we’re working on
-                civilian space suits and manned shuttle kits you can assemble at
-                home so that the next generation of kids really <em>can</em>{' '}
-                make it to orbit — from the comfort of their own backyards.
+                Today, I'm working for Inawisdom - an AWS Premier Partner specialising in helping businesses to extract usable insights from 
+                the data that they have. This is usually via the means of new (or improved) data platforms, or via machine learning.
               </p>
             </div>
           </div>
           <div className="lg:pl-20">
             <ul role="list">
-              <SocialLink href="#" icon={TwitterIcon}>
+              <SocialLink href="https://twitter.com/alex_kearns" icon={TwitterIcon}>
                 Follow on Twitter
               </SocialLink>
-              <SocialLink href="#" icon={InstagramIcon} className="mt-4">
+              <SocialLink href="https://instagram.com/alexjameskearns" icon={InstagramIcon} className="mt-4">
                 Follow on Instagram
               </SocialLink>
-              <SocialLink href="#" icon={GitHubIcon} className="mt-4">
+              <SocialLink href="https://github.com/alexkearns" icon={GitHubIcon} className="mt-4">
                 Follow on GitHub
               </SocialLink>
-              <SocialLink href="#" icon={LinkedInIcon} className="mt-4">
+              <SocialLink href="https://linkedin.com/in/alexjameskearns" icon={LinkedInIcon} className="mt-4">
                 Follow on LinkedIn
               </SocialLink>
               <SocialLink
-                href="mailto:spencer@planetaria.tech"
+                href="mailto:alex@alexkearns.co.uk"
                 icon={MailIcon}
                 className="mt-8 border-t border-zinc-100 pt-8 dark:border-zinc-700/40"
               >
-                spencer@planetaria.tech
+                alex@alexkearns.co.uk
               </SocialLink>
             </ul>
           </div>
