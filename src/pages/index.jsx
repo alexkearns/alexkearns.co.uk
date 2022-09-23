@@ -248,7 +248,8 @@ export default function Home({ articles }) {
         </title>
         <meta
           name="description"
-          content="I’m Spencer, a software designer and entrepreneur based in New York City. I’m the founder and CEO of Planetaria, where we develop technologies that empower regular people to explore space on their own terms."
+          content="I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Senior Solution Engineer building brilliant
+          things data and machine learning for clients of all sizes."
         />
       </Head>
       <Container className="mt-9">
@@ -257,7 +258,7 @@ export default function Home({ articles }) {
             Usually found with my head in the clouds.
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Solution Engineer building brilliant
+            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Senior Solution Engineer building brilliant
             things data and machine learning for clients of all sizes.
           </p>
           <div className="mt-6 flex gap-6">
