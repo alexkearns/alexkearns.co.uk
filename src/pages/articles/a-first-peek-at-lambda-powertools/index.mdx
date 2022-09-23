@@ -1,0 +1,145 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/future/image'
+import loggerImage from './logger.png'
+import tracerImage from './tracer.png'
+
+export const meta = {
+  author: 'Alex Kearns',
+  date: '2022-01-18',
+  title: 'A first peek at Lambda Powertools',
+  description: "We'll look at my five favourite features of Lambda Powertools and how they can be used day-to-day to make development more efficient. Deliberately not going into super detail on how to set up each of these features - the documentation is very, very good and there's no need for me to repeat it all!"
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+[AWS Lambda Powertools for Python](https://awslabs.github.io/aws-lambda-powertools-python/1.24.0/) has been around publicly 
+since the end of 2019 and reached General Availability in June 2020. It's described as "A suite of utilities for AWS Lambda 
+functions to ease adopting best practices such as tracing, structured logging, custom metrics, and more."
+
+Within the community, this library has become almost a standard for serverless projects and it is clear to see why. Over the
+past year the pace of features being added has rocketed; it has certainly become one of my favourite tools to have at 
+my disposal when it comes to building serverless solutions on AWS.
+
+In this post, we'll look at my five favourite features of Lambda Powertools and how they can be used day-to-day to make 
+development more efficient.
+
+I'm deliberately not going to go into super detail on how to set up each of these features - the documentation is very,
+very good and there's no need for me to repeat it all!
+
+All the features discussed below are consolidated into a demo application on GitHub [here](https://github.com/alexkearns/lambda-powertools-demo/tree/a1f7910f90ccc3a6136b844beee3f77124ee5d32).
+
+## Tracer
+
+The `Tracer` utility is a light wrapper on top of AWS X-Ray, a service used for tracing requests through an application. 
+Often these applications are microservice architectures where one request might touch many services behind the scenes. Having 
+a way to debug where this request might've gone wrong along the road is incredibly useful. 
+
+The code snippets below shows what needs to be added to the SAM template and Lambda function Python script in order to get 
+a minimal example up and running for tracing with X-Ray.
+
+```yaml
+HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Tracing: Active
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: lambda-powertools-demo-hello-world
+```
+```python
+from aws_lambda_powertools import Tracer
+
+tracer = Tracer()
+
+
+@tracer.capture_lambda_handler
+def lambda_handler(event, context):
+    return {
+        "statusCode": 200,
+        "body": json.dumps({
+            "message": "hello world",
+        }),
+    }
+```
+
+Once requests start running through the function, X-Ray will generate traces such as the one below. 
+
+<Image src={tracerImage} alt="" />
+
+## Logger
+
+Next up, it's the `Logger` utility. We all know that logging in applications is important for debugging purposes as well 
+as general observability. Within AWS, CloudWatch Logs is the obvious choice for log storage and searching. The `Logger` 
+tool in Powertools makes writing structured logs considerably easier. When running a statement like `logger.info("foo")` 
+the library will take care of writing to CloudWatch in a consistent format to make searching easy.
+
+The snippets below show the basic steps required to get logging hooked up within your Lambda.
+
+```yaml
+HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: lambda-powertools-demo-hello-world
+          LOG_LEVEL: INFO
+```
+```python
+from aws_lambda_powertools import Logger
+
+logger = Logger()
+
+
+@logger.inject_lambda_context(log_event=True)
+def lambda_handler(event, context):
+    logger.info("Running Hello World function")
+    return {
+        "statusCode": 200,
+        "body": json.dumps({
+            "message": "hello world",
+        }),
+    }
+```
+
+The simple example above translates into a log stream like the following. You can see that the Lambda function event and 
+the `logger.info` call have been written in a consistent format which makes it possible for us to query them using CloudWatch 
+Log Insights - a service built on top of CloudWatch Logs that enables the understanding of logs through a structured query 
+language.
+
+<Image src={loggerImage} alt="" />
+
+## Event Source Data Classes
+
+Event Source Data Classes are an understated favourite. They don't provide any interaction with AWS services, but they do 
+increase the efficiency of developing event-driven applications.
+
+They do this by providing documented, typed classes for a variety of events that can trigger a Lambda function. This means 
+that when developing against these events, you don't need to spend all the time with your head in documentation trying to 
+figure out what parameters get sent and whether they are serialised or not.
+
+```python
+import json
+from aws_lambda_powertools import Logger
+from aws_lambda_powertools.utilities.data_classes import (
+    event_source,
+    APIGatewayProxyEvent
+)
+
+
+logger = Logger()
+
+
+@event_source(data_class=APIGatewayProxyEvent)
+@logger.inject_lambda_context(log_event=True)
+def lambda_handler(event: APIGatewayProxyEvent, context):
+    logger.info(f"Method: {event.http_method}")
+    logger.info(f"Path: {event.path}")
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps({
+            "message": "hello world",
+        }),
+    }
+
+```

@@ -139,36 +139,29 @@ function Newsletter() {
 function Resume() {
   let resume = [
     {
-      company: 'Planetaria',
-      title: 'CEO',
+      company: 'Inawisdom',
+      title: 'Senior Consultant',
       logo: logoPlanetaria,
-      start: '2019',
+      start: '2021',
       end: {
         label: 'Present',
         dateTime: new Date().getFullYear(),
       },
     },
     {
-      company: 'Airbnb',
-      title: 'Product Designer',
+      company: 'BT',
+      title: 'Cloud Engineer',
       logo: logoAirbnb,
-      start: '2014',
-      end: '2019',
+      start: '2020',
+      end: '2021',
     },
     {
-      company: 'Facebook',
-      title: 'iOS Software Engineer',
+      company: 'Software Developer',
+      title: 'ubisend',
       logo: logoFacebook,
-      start: '2011',
-      end: '2014',
-    },
-    {
-      company: 'Starbucks',
-      title: 'Shift Supervisor',
-      logo: logoStarbucks,
-      start: '2008',
-      end: '2011',
-    },
+      start: '2017',
+      end: '2020',
+    }
   ]
 
   return (
@@ -251,7 +244,7 @@ export default function Home({ articles }) {
     <>
       <Head>
         <title>
-          Spencer Sharp - Software designer, founder, and amateur astronaut
+          Alex Kearns - AWS Data Consultant
         </title>
         <meta
           name="description"
@@ -261,32 +254,30 @@ export default function Home({ articles }) {
       <Container className="mt-9">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-            Software designer, founder, and amateur astronaut.
+            Usually found with my head in the clouds.
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            I’m Spencer, a software designer and entrepreneur based in New York
-            City. I’m the founder and CEO of Planetaria, where we develop
-            technologies that empower regular people to explore space on their
-            own terms.
+            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Solution Engineer building brilliant
+            things data and machine learning for clients of all sizes.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
-              href="https://twitter.com"
+              href="https://twitter.com/alex_kearns"
               aria-label="Follow on Twitter"
               icon={TwitterIcon}
             />
             <SocialLink
-              href="https://instagram.com"
+              href="https://instagram.com/alexjameskearns"
               aria-label="Follow on Instagram"
               icon={InstagramIcon}
             />
             <SocialLink
-              href="https://github.com"
+              href="https://github.com/alexkearns"
               aria-label="Follow on GitHub"
               icon={GitHubIcon}
             />
             <SocialLink
-              href="https://linkedin.com"
+              href="https://linkedin.com/in/alexjameskearns"
               aria-label="Follow on LinkedIn"
               icon={LinkedInIcon}
             />
