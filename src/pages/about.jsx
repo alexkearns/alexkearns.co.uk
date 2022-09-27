@@ -66,17 +66,17 @@ export default function About() {
             </h1>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
               <p>
-                I’ve always been a bit of a geek. Interested in computers from an early age, whether it was in relation to software 
+                I&apos;ve always been a bit of a geek. Interested in computers from an early age, whether it was in relation to software 
                 or hardware. I remember writing my first HTML at school and being hooked on the process of writing code that changed 
                 what appeared on the screen. I also remember being fascinated at how computers worked inside, taking great pleasure in 
-                dismantling the family computer. I'm not sure my parents remember it so fondly, given that I could not put it back together 
+                dismantling the family computer. I&apos;m not sure my parents remember it so fondly, given that I could not put it back together 
                 again!
               </p>
               <p>
                 I think it was always clear to me that I would end up working in tech in some way, shape or form. It took a little while 
                 to work out exactly what it was - I began with a software development role during, and for the years immediately following, 
                 my studies at university. In this role I had some exposure to AWS, primarily due to it being a small team and someone having 
-                to do it! I began to cut my teeth on the high level concepts that I'd need as a base.
+                to do it! I began to cut my teeth on the high level concepts that I&apos;d need as a base.
               </p>
               <p>
                 Through self study as well as increased responsibility at work, I moved to BT to work specifically on AWS projects. The long 
@@ -85,7 +85,7 @@ export default function About() {
                 required for it to be used on sensitive projects.
               </p>
               <p>
-                Today, I'm working for Inawisdom - an AWS Premier Partner specialising in helping businesses to extract usable insights from 
+                Today, I&apos;m working for Inawisdom - an AWS Premier Partner specialising in helping businesses to extract usable insights from 
                 the data that they have. This is usually via the means of new (or improved) data platforms, or via machine learning.
               </p>
             </div>
