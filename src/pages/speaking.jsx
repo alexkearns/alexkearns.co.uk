@@ -49,16 +49,16 @@ export default function Speaking() {
               cta="Video coming soon..."
             />
             <Appearance
-              href="#"
+              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/democratising_ml_for_business.pdf"
               title="Democratising Machine Learning for Business"
               description="A session designed to give an audience new to machine learning enough of an overview to have informed conversations and recognise opportunities to drive efficiencies in their businesses."
               event="nor(DEV):con 2022"
-              cta="Download slides"
+              cta="View slides"
             />
           </SpeakingSection>
           <SpeakingSection title="Events">
             <Appearance
-              href="#"
+              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/controlled_empowerment_a_tale_of_two_sides.pdf"
               title="Controlled Empowerment: A tale of two sides"
               description="A 15 minute lightning talk delivered to my fellow AWS Ambassadors about how developers can be empowered to work freely on AWS without introducing
                 unacceptable security risks."
@@ -91,7 +91,7 @@ export default function Speaking() {
               cta="Watch video"
             />
             <Appearance
-              href="#"
+              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/tech-and-toast-peaks-in-website-traffic.pdf"
               title="Tech and Toast: Handling Peaks in Website Traffic"
               description="I opted to talk about scaling websites / web applications. This was a topic that has been majority self taught and that I have a real interest in moving into as a career. 
                 The one hesitation I had about giving speaking on this was that the audience were likely to be only about 1/3 technical. When the topic has potential to be so complex from a technical perspective, 
@@ -107,6 +107,14 @@ export default function Speaking() {
                 Safe to say, as it was my first proper public speaking event, I was a little nervous. A lot more people turned up than I was expecting which didn't help with that! After speaking to a few people afterwards, it seemed to have gone well which I was pleased with."
               event="Tech East, November 2019"
               cta="Watch video"
+            />
+            <Appearance
+              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/uea-moneyhack.pdf"
+              title="What is a chatbot?"
+              description="With a colleague at ubisend, I gave a talk to a group of schoolchildren taking part in the UEA Moneyhack programme - designed to give them an 
+                introduction into the world of FinTech. The talk gave an introduction to the world of chatbots "
+              event="UEA Moneyhack, October 2019"
+              cta="View slides"
             />
           </SpeakingSection>
           <SpeakingSection title="Live streams">
