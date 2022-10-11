@@ -11,16 +11,168 @@ export default (props) => <ArticleLayout meta={meta} {...props} />
 
 I'm lucky enough to be attending re:Invent 2022 this year and as reservations for the sessions open later today (Tues 11 Oct 2022 6pm BST), I thought I would follow others and produce a guide of those sessions that I think are the most valuable. There are so many sessions that I'd love to see, but only so much time in the day.
 
-This guide is closely aligned wih my interests in serverless, event driven architectures and general AWS best practices. That does mean that it might not quite fit with what you want to get out of re:Invent.
-
-If you're catching up with this guide after all the reservation slots have gone, not to worry - there is usually space for walk-up attendees.
+This guide is closely aligned wih my interests in serverless, event driven architectures and general AWS best practices. That does mean that it might not quite fit with what you want to get out of re:Invent. If you're catching up with this guide after all the reservation slots have gone, not to worry - there is usually space for walk-up attendees. Session descriptions are all taken verbatim from the re:Invent session catalog.
 
 ## Monday 28th Nov
 
+### API311: Building next-gen applications with event-driven architectures [300]
+- **10:00 AM - 11:00 AM**
+- Level 1, Lafite 5, Wynn
+- Breakout Session
+
+**Speakers**
+- TBA
+
+Event-driven architectures can solve many difficult problems in modern enterprise workloads. For example, it can be challenging to work with large amounts of data in different data stores and locations. Teams building microservices architecture often find that integration with other applications and external services can make their workloads more monolithic and tightly coupled. In this chalk talk, learn how to use event-based architecture to decouple and decentralize application components. Discover how you can use AWS messaging services to connect microservices and coordinate data flow using minimal custom code.
+
+### API313: Understanding design in event-driven architecture [300]
+- 12:15 PM - 1:15 PM
+- Level 3, 354, MGM Grand
+- Chalk Talk
+
+**Speakers**
+- David Boyne, Senior Developer Advocate, AWS
+
+Event-driven applications can help you to reduce coupling and increase agility. The design and contracts of your events shape how your distributed architecture is built and determine how it can best remain decoupled, scalable, and fault tolerant. In this chalk talk, learn a robust approach to event design, common event patterns used, the importance of event-first thinking, and how event designation can impact your architecture.
+
+### KEY001: Monday Night Live with Peter DeSantis
+- 7:30 PM - 9:00 PM
+- Level 2, Hall F, Venetian
+- Keynote
+
+Join Peter DeSantis, Senior Vice President of AWS Utility Computing, as he provides a look at the latest innovations from AWS and the ways that AWS continues to push the boundaries of performance in the cloud. Peter provides a glimpse of how teams at AWS dive deep to engineer novel solutions across silicon, networking, storage, and compute, without compromising on traditional tradeoffs around performance, sustainability, or cost.
+
 ## Tuesday 29th Nov
+
+### KEY002: Adam Selipsky Keynote
+- 8:30 AM - 10:30 AM
+- Level 2, Hall F, Venetian
+- Keynote
+
+Join Adam Selipsky, CEO of Amazon Web Services, as he looks at the ways that forward-thinking builders are transforming industries and even our future, powered by AWS. He highlights innovations in data, infrastructure, security, and more that are helping customers achieve their goals faster, take advantage of untapped potential, and create a better future with AWS.
+
+### SVS317: Supercharge your serverless application with AWS Lambda extensions [300]
+- 12:30 PM - 1:30 PM
+- Level 1, Forum 104, Caesars Forum
+- Chalk Talk
+
+**Speakers**
+- Harold Sun, Senior Specialist Solutions Architect, Serverless, AWS
+
+AWS Lambda extensions open up the Lambda execution environment and provide lifecycle hooks. This chalk talk gives you a deeper look at how to use Lambda extensions to extend a Lambda programing model to run web applications on Lambda, implement chaos engineering, clean up resources with smooth shutdown, inject secrets as environment variables, and debug Lambda functions live. Learn how to supercharge your serverless applications with Lambda extensions.
+
+### DOP301: The Amazon Builders’ Library: 25 years of operational excellence at Amazon [300]
+- 3:30 PM - 4:30 PM
+- Level 2 South, Lagoon L, Mandalay Bay
+- Breakout Session
+
+**Speakers**
+- Colm MacCarthaigh, VP / Distinguished Engineer, AWS
+- David Yanacek, Sr. Principal Engineer, AWS
+
+Amazon has practiced DevOps, where builders build but also test and operate almost every aspect of their services, since before it had a name. In this session, hear how Amazon practices have changed and improved over time and what we’ve learned as builders and as operators. What has it been like to be on call at Amazon? And what’s it like now to be on a call at Amazon? We’ll share real-world experience and answers.
 
 ## Wednesday 30th Nov
 
+### KEY003: Swami Sivasubramanian Keynote
+- 8:30 AM - 10:30 AM
+- Level 2, Hall F, Venetian
+- Keynote
+
+Join Swami Sivasubramanian, Vice President of AWS Data and Machine Learning, as he reveals the latest AWS innovations that can help you transform your company’s data into meaningful insights and actions for your business. In this keynote, several speakers discuss the key components of a future-proof data strategy and how to empower your organization to drive the next wave of modern invention with data. Hear from leading AWS customers who are using data to bring new experiences to life for their customers.
+
+### COP343: Observability best practices at Amazon [300]
+- 11:30 AM - 12:30 PM
+- Level 1, Summit 214, Caesars Forum
+- Breakout Session
+
+**Speakers**
+- TBA
+
+In this session, learn about Amazon’s never-ending journey for the perfect granularity of observability. This session covers the full range of monitoring at Amazon—from how teams assess system health at a high level to how they zoom in to understand the details of a single request. Learn best practices for metrics, logs, and tracing and how to use these signals to achieve operational excellence.
+
+### ANT332: Build a data pipeline using Apache Airflow & Amazon EMR Serverless [300]
+- 1:00 PM - 2:00 PM
+- Level 1, Alliance 312, Caesars Forum
+- Builders' Session
+
+**Speakers**
+- Gagan Brahmi, Specialist Solutions Architect, AWS
+- Changbin Gong, Principal Solutions Architect, Amazon
+- Amir Basirat, Senior Analytics Specialist Solutions Architect, AWS
+- Francesco Marelli, Principal Solutions Architect, AWS
+- Gareth Eagar, Senior Solution Architect, AWS
+
+### ARC310: Beyond five 9s: Lessons from our highest available data planes [300]
+- 2:30 PM - 3:30 PM
+- Level 2, Venetian Theatre, Venetian
+- Breakout Session
+
+**Speakers**
+- Colm MacCarthaigh, VP / Distinguished Engineer, AWS
+
+Updated with recent learning, this session dives deep into building and improvising resilience in AWS services. Every AWS service is designed to be highly available, but a small number of what are called Tier 0 services get extra-special attention. In this session, hear lessons from how AWS has built and architected Amazon Route 53 and the AWS authentication system to help them survive cataclysmic failures, enormous load increases, and more. Learn about the AWS approach to redundancy and resilience at the infrastructure, software, and team levels and how the teams tasked with keeping the internet running manage themselves and keep up with the pace of change that AWS customers demand.
+
+### ARC315: Designing resilient serverless architectures [300]
+- 4:45 PM - 5:45 PM
+- Level 3 South, Jasmine F, Mandalay Bay
+- Breakout Session
+
+**Speakers**
+- Laura Hyatt, Solutions Architect, AWS
+- Tony Politano, Principal Product Manager, Amazon
+
+If AWS Lambda scales automatically, you might wonder, what is left for architects to do? The answer is: plenty. However, in a serverless world, designing resilient serverless applications can be a little different. This session covers how to use AWS serverless services to build resilient systems. This includes building systems using resilient serverless design patterns, validating them using AWS Resilience Hub, and completing experiments with chaos engineering.
+
 ## Thursday 1st Dec
 
+### KEY005: Werner Vogels Keynote
+- 8:30 AM - 10:30 AM
+- Level 2, Hall F, Venetian
+- Keynote
+
+Join Dr. Werner Vogels, Amazon.com VP and CTO, as he shows how customers and AWS are using novel architectural patterns to build scalable, resilient, and fault-tolerant applications. He highlights innovations and emerging technologies that enable builders to create systems that would have been previously unimaginable and describes how the cloud is at the center of this new era of innovation.
+
+### BOA31: Modernize and gradually migrate your data model from SQL to NoSQL [300]
+- 11:45 AM - 12:45 PM
+- Level 1, Grand 121, MGM Grand
+- Breakout Session
+
+**Speakers**
+- Darko Meszaros, Developer Advocate, AWS
+- Alexander Schueren, Senior Specialist Solutions Architect, AWS
+
+Serverless architectures allow developers to modernize their applications by rethinking their architecture to reduce infrastructure management tasks and seamlessly scale and integrate with many services at a significantly lower cost. While there are ways to refactor the code base, changing the data model remains a challenging task in virtually every modernization. Join this session to learn more about tools and practices for gradually migrating a SQL database model to Amazon DynamoDB and building the right APIs with AWS AppSync and GraphQL.
+
+### DOP208-L: Delighting developers: Builder experience at AWS [200]
+- 2:00 PM - 3:00 PM
+- Level 5, Palazzo Ballroom B, Venetian
+- Leadership Session
+
+**Speakers**
+- Adam Seligman, VP Developer Experience, AWS
+- Emily Freeman, Head of Community Engagement, AWS
+
+In this session, join Adam Seligman, Vice President of Developer Experience, as he shares the latest AWS tools and experiences for teams developing in the cloud. Adam recaps the latest launches and demos how key services can integrate to accelerate developer productivity. Additionally, Adam provides insights and updates across many areas of developer tooling including low-code abstractions, cloud development, and operations, and relays how AWS is empowering developers to ship resilient applications in a fraction of the time.
+
+### API307: Designing event-driven integrations using Amazon EventBridge [300]
+- 4:15 PM - 5:15 PM
+- Level 2 South, Lagoon I, Mandalay Bay
+- Breakout Session
+
+**Speakers**
+- Stephen Liedig, Principal Serverless Specialist Solutions Architect, AWS
+
+Event-driven architecture can bring alignment to an organization’s business capabilities. Amazon EventBridge enables application integration across business applications and improves modern application development practices. In this session, learn about the roles and responsibilities of stakeholder groups and discover foundational concepts for designing and building a sustainable, scalable, serverless event bus for your organization.
+
 ## Friday 2nd Dev
+
+### BOA204: When security, safety, and urgency all matter: Handling Log4Shell [200]
+- 10:00 AM - 11:00 AM
+- Level 1, Forum 113, Caesars Forum
+- Breakout Session
+
+**Speakers**
+- Abby Fuller, Security @ EC2, AWS
+
+On December 9, 2021, there was a report of a potential remote code execution issue in the widely used open-source Apache logging library Log4j. This issue allowed a user to use Java Naming and Directory Interface (JNDI) and LDAP endpoints to execute arbitrary code on a system. Over the next 10 days, 5 additional common vulnerabilities and exposures affecting Log4j were made public. This event as is now referred to as Log4Shell. In this session, learn about the response to Log4Shell, from initial notification to hot patch, fleet scanning, and customer communications.
