@@ -1,0 +1,74 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/future/image'
+
+export const meta = {
+  author: 'Alex Kearns',
+  date: '2022-10-22',
+  title: 're:Invent 2022 wishlist - don\'t stop believin\'',
+  description: 'The final three things that round up my wishlist for what I\'d like to be announced at the 2022 edition of AWS re:Invent.'
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+This is the third, and final, article in my series of blog posts detailing my hopes for new features to be announced at re:Invent 2022. I think that these fall somewhere between optimistic and realistic. They're all things that I'm sure other people would appreciate also.
+
+## Step Functions event source mappings
+
+Lambda event source mappings are a useful feature for automatically invoking Lamdba functions in response to new data being available in other services - these services are primarily stream or queue based. An example of this would be the mapping between a Kinesis stream and a Lambda function as shown in the CloudFormation below.
+
+```yaml
+LambdaEventSourceMapping:
+  Type: 'AWS::Lambda::EventSourceMapping'
+  Properties:
+    EventSourceArn: !Sub 'arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/${KinesisStream}'
+    FunctionName: !GetAtt 'LambdaFunction.Arn'
+    StartingPosition: 'TRIM_HORIZON'
+```
+
+What I'd like to see is the same functionality, but used for executing a state machine. Step Functions is flexible enough that the JSON contained in the event payload could be manipulated, and with the SDK integration could do an awful lot of interaction with other services. Imagine how cool it'd be to automatically invoke a state machine for each message on an SQS queue, or each item in a Kinesis stream!
+
+```yaml
+StepFunctionsEventSourceMapping:
+  Type: 'AWS::StepFunctions::EventSourceMapping'
+  Properties:
+    EventSourceArn: !Sub 'arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/${KinesisStream}'
+    StateMachineArn: !Ref 'StepFunctionStateMachine'
+    StartingPosition: 'TRIM_HORIZON'
+```
+
+## CodeCommit UX improvements
+
+Using CodeCommit feels a little bit like visiting the land that time forgot. Competitors to CodeCommit like GitHub are much easier to use. For me, one of the biggest improvements that could be made is around the visibility of comments and reviews on pull requests. Peer review is an essential part of development, and it's frustrating to try and do it effectively with CodeCommit.
+
+I'm finding it really hard to articulate exactly what it is about GitHub that makes it so enjoyable to use. So my wish for re:Invent is for something to happen with CodeCommit to make it more like GitHub!
+
+## CloudFormation cost estimates
+
+Predicting costs is a common pain point that I (and most) hear from people that are new to AWS. Something that I would really value is an addition to CloudFormation (by extension, CDK and SAM) where an estimated cost is shown based on the resources being created or updated. 
+
+Admittedly this would be incredibly challenging to implement, however I think that one way to do it would be basing it on previous usage - at least when resources are being updated (e.g. an EC2 instance changing from `m5.large` to `m5.xlarge`). 
+
+A potential way that cost estimates could be calculated for new resources is by defining usage in a new `EstimatedUsage` section of a CloudFormation template. This could look something like the following:
+
+```yaml
+Resources:
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: python3.9
+      CodeUri: ./lambda_function
+      MemorySize: 1024
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 100
+
+EstimatedUsage:
+  LambdaFunction:
+    OnDemandInvocations: 1000000
+```
+
+In this example - based on the resource configuration of the Lambda function, the provisioned concurrency configuration and the `OnDemandInvocations` value, a monthly cost could be estimated. From this, it could also be extended by automatically setting up alarms based on predicted usage.
+
+## Wrapping up
+
+There's no more wishlist articles to come before re:Invent but I promise there'll be plenty of content when I'm there in response to new announcements and the people I meet!
