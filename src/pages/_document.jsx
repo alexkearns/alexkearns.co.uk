@@ -36,6 +36,12 @@ const modeScript = `
 `
 
 export default function Document() {
+  let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  // Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+    siteUrl = `https://${process.env.NEXT_VERCEL_SITE_URL}`
+  }
+  
   return (
     <Html className="h-full antialiased" lang="en">
       <Head>
@@ -43,12 +49,12 @@ export default function Document() {
         <link
           rel="alternate"
           type="application/rss+xml"
-          href={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/rss/feed.xml`}
+          href={`${siteUrl}/rss/feed.xml`}
         />
         <link
           rel="alternate"
           type="application/feed+json"
-          href={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/rss/feed.json`}
+          href={`${siteUrl}/rss/feed.json`}
         />
       </Head>
       <body className="flex h-full flex-col bg-zinc-50 dark:bg-black">

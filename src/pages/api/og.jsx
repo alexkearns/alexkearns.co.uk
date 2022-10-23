@@ -4,8 +4,6 @@ export const config = {
   runtime: 'experimental-edge',
 };
 
-const siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-
 // Make sure the font exists in the specified path:
 const interBoldFont = fetch(new URL('../../../assets/InterBold.otf', import.meta.url)).then(
   (res) => res.arrayBuffer(),
@@ -20,7 +18,8 @@ export default async function handler(req) {
   const interFontData = await interFont;
 
   try {
-    const { searchParams } = new URL(req.url);
+    const { protocol, hostname, port, searchParams } = new URL(req.url);
+    const siteUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}`
 
     // ?title=<title>
     const hasTitle = searchParams.has('title');
