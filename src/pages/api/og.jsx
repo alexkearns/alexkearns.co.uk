@@ -4,7 +4,7 @@ export const config = {
   runtime: 'experimental-edge',
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+const siteUrl = process.env.NEXT_PUBLIC_VERCEL_URL
 
 // Make sure the font exists in the specified path:
 const interBoldFont = fetch(new URL('../../../assets/InterBold.otf', import.meta.url)).then(
