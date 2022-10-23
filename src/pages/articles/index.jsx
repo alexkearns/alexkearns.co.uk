@@ -1,9 +1,18 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { getAllArticles } from '@/lib/getAllArticles'
 import { formatDate } from '@/lib/formatDate'
+
+let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+// Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
+if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+  siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+}
+
+const { host } = new URL(siteUrl)
 
 function Article({ article }) {
   return (
@@ -35,18 +44,39 @@ function Article({ article }) {
 }
 
 export default function ArticlesIndex({ articles }) {
+  let router = useRouter()
+  const description = "My longer-form thoughts primarily focused on AWS, with a sprinkling of other stuff for good measure, collected in chronological order."
   return (
     <>
       <Head>
         <title>Articles - Alex Kearns</title>
         <meta
           name="description"
-          content="My longer-form thoughts primarily focused on AWS, with a sprinkling of other stuff for good measure, collected in chronological order."
+          content={description}
         />
+        <meta property="og:url" content={`${siteUrl}${router.asPath}`} />
+        <meta property="og:type" content="webpage" />
+        <meta property="og:title" content="Articles" />
+        <meta property="og:description" content={description} />
+        <meta
+          property="og:image"
+          content={`${siteUrl}/api/og?title=Articles`}
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content={host} />
+        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:title" content="Articles" />
+        <meta name="twitter:description" content={description} />
+        <meta
+          property="twitter:image"
+          content={`${siteUrl}/api/og?title=Articles`}
+        />
+
       </Head>
       <SimpleLayout
         title="Writing all about AWS related things, as well as general tech and life stuff."
-        intro="My longer-form thoughts primarily focused on AWS, with a sprinkling of other stuff for good measure, collected in chronological order."
+        intro={description}
       >
         <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
           <div className="flex max-w-3xl flex-col space-y-16">

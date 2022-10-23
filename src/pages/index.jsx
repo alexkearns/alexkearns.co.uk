@@ -1,5 +1,6 @@
 import Image from 'next/future/image'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import clsx from 'clsx'
 
@@ -24,6 +25,14 @@ import logoInawisdom from '@/images/logos/inawisdom.jpeg'
 import { generateRssFeed } from '@/lib/generateRssFeed'
 import { getAllArticles } from '@/lib/getAllArticles'
 import { formatDate } from '@/lib/formatDate'
+
+let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+// Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
+if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+  siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+}
+
+const { host } = new URL(siteUrl)
 
 function MailIcon(props) {
   return (
@@ -325,6 +334,9 @@ function Photos() {
 }
 
 export default function Home({ articles }) {
+  let router = useRouter()
+  const description = "I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Senior Solution Engineer building brilliant things data and machine learning for clients of all sizes."
+  
   return (
     <>
       <Head>
@@ -333,8 +345,25 @@ export default function Home({ articles }) {
         </title>
         <meta
           name="description"
-          content="I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Senior Solution Engineer building brilliant
-          things data and machine learning for clients of all sizes."
+          content={description}
+        />
+        <meta property="og:url" content={`${siteUrl}${router.asPath}`} />
+        <meta property="og:type" content="webpage" />
+        <meta property="og:title" content="Alex Kearns - AWS Data Consultant" />
+        <meta property="og:description" content={description} />
+        <meta
+          property="og:image"
+          content={`${siteUrl}/api/og?title=Alex Kearns - AWS Data Consultant`}
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content={host} />
+        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:title" content="Alex Kearns - AWS Data Consultant" />
+        <meta name="twitter:description" content={description} />
+        <meta
+          property="twitter:image"
+          content={`${siteUrl}/api/og?title=Alex Kearns - AWS Data Consultant`}
         />
       </Head>
       <Container className="mt-9">
