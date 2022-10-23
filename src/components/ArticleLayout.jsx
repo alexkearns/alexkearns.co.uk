@@ -32,19 +32,37 @@ export function ArticleLayout({
 
   let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   // Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-  if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
-    siteUrl = `https://${process.env.NEXT_VERCEL_SITE_URL}`
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+    siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   }
+
+  const { host } = new URL(siteUrl)
 
   return (
     <>
       <Head>
         <title>{`${meta.title} - Alex Kearns`}</title>
         <meta name="description" content={meta.description} />
+
+        <meta property="og:url" content={`${siteUrl}${router.asPath}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:description" content={meta.description} />
         <meta
           property="og:image"
-          content={`${siteUrl}/api/og?title=${meta.title}&date=${meta.date}`}
+          content={`${siteUrl}/api/og?title=${meta.title}&date=${formatDate(meta.date)}`}
         />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content={host} />
+        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta
+          property="twitter:image"
+          content={`${siteUrl}/api/og?title=${meta.title}&date=${formatDate(meta.date)}`}
+        />
+        
       </Head>
       <Container className="mt-16 lg:mt-32">
         <div className="xl:relative">

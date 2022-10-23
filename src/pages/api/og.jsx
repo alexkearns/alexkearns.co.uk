@@ -5,21 +5,18 @@ export const config = {
 };
 
 // Make sure the font exists in the specified path:
-const interBoldFont = fetch(new URL('../../../assets/InterBold.otf', import.meta.url)).then(
-  (res) => res.arrayBuffer(),
-);
-
-const interFont = fetch(new URL('../../../assets/Inter.otf', import.meta.url)).then(
+const interMediumFont = fetch(new URL('../../../assets/InterMedium.woff', import.meta.url)).then(
   (res) => res.arrayBuffer(),
 );
 
 export default async function handler(req) {
-  const interBoldFontData = await interBoldFont;
-  const interFontData = await interFont;
+  const interMediumFontData = await interMediumFont;
 
   try {
     const { protocol, hostname, port, searchParams } = new URL(req.url);
     const siteUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}`
+
+    console.log(siteUrl)
 
     // ?title=<title>
     const hasTitle = searchParams.has('title');
@@ -74,7 +71,7 @@ export default async function handler(req) {
           <div style={{display: 'flex', flexDirection: 'column', padding: '80px'}}>
             <div
               style={{
-                fontWeight: 700,
+                fontWeight: 500,
                 color: 'white',
                 fontSize: 60,
                 letterSpacing: '-0.025em',
@@ -87,7 +84,7 @@ export default async function handler(req) {
             </div>
             {hasDate && <div
               style={{
-                fontWeight: 400,
+                fontWeight: 500,
                 color: '#bfbfbf',
                 fontSize: 35,
                 letterSpacing: '-0.025em',
@@ -108,14 +105,9 @@ export default async function handler(req) {
         fonts: [
           {
             name: 'Inter',
-            data: interBoldFontData,
-            weight: 700,
-          },
-          {
-            name: 'Inter',
-            data: interFontData,
-            weight: 400,
-          },
+            data: interMediumFontData,
+            weight: 500,
+          }
         ],
       },
     );

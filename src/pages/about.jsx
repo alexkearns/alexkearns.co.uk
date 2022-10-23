@@ -1,5 +1,6 @@
 import Image from 'next/future/image'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import clsx from 'clsx'
 
@@ -11,6 +12,14 @@ import {
   LinkedInIcon,
 } from '@/components/SocialIcons'
 import portraitImage from '@/images/portrait.jpg'
+
+let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+// Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
+if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+  siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+}
+
+const { host } = new URL(siteUrl)
 
 function SocialLink({ className, href, children, icon: Icon }) {
   return (
@@ -38,13 +47,33 @@ function MailIcon(props) {
 }
 
 export default function About() {
+  let router = useRouter()
+  const description = "I’m Alex Kearns. I live in the UK, where I build data platforms on AWS to enable businesses to extract insights from their most valuable asset."
   return (
     <>
       <Head>
         <title>About - Alex Kearns</title>
         <meta
           name="description"
-          content="I’m Alex Kearns. I live in the UK, where I build data platforms on AWS to enable businesses to extract insights from their most valuable asset."
+          content={description}
+        />
+        <meta property="og:url" content={`${siteUrl}${router.asPath}`} />
+        <meta property="og:type" content="webpage" />
+        <meta property="og:title" content="About" />
+        <meta property="og:description" content={description} />
+        <meta
+          property="og:image"
+          content={`${siteUrl}/api/og?title=About`}
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content={host} />
+        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:title" content="About" />
+        <meta name="twitter:description" content={description} />
+        <meta
+          property="twitter:image"
+          content={`${siteUrl}/api/og?title=About`}
         />
       </Head>
       <Container className="mt-16 sm:mt-32">
