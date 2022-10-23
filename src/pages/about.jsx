@@ -67,8 +67,8 @@ export default function About() {
         />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content={host} />
-        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:domain" content={host} />
+        <meta name="twitter:url" content={`${siteUrl}${router.asPath}`} />
         <meta name="twitter:title" content="About" />
         <meta name="twitter:description" content={description} />
         <meta

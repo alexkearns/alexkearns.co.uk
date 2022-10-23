@@ -56,8 +56,8 @@ export default function Speaking() {
         />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content={host} />
-        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:domain" content={host} />
+        <meta name="twitter:url" content={`${siteUrl}${router.asPath}`} />
         <meta name="twitter:title" content="Speaking" />
         <meta name="twitter:description" content={description} />
         <meta
