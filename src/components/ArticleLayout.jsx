@@ -43,7 +43,7 @@ export function ArticleLayout({
         <meta name="description" content={meta.description} />
         <meta
           property="og:image"
-          content={`${siteUrl}/api/og?title=${meta.title}&date=${meta.date}`}
+          content={`${siteUrl}/api/og?title=${meta.title}&date=${formatDate(meta.date)}`}
         />
       </Head>
       <Container className="mt-16 lg:mt-32">
