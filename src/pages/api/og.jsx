@@ -16,6 +16,8 @@ export default async function handler(req) {
     const { protocol, hostname, port, searchParams } = new URL(req.url);
     const siteUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}`
 
+    console.log(siteUrl)
+
     // ?title=<title>
     const hasTitle = searchParams.has('title');
     const title = hasTitle

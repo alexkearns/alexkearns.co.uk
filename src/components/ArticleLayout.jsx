@@ -36,6 +36,8 @@ export function ArticleLayout({
     siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   }
 
+  const { host } = new URL(siteUrl)
+
   return (
     <>
       <Head>
@@ -52,7 +54,7 @@ export function ArticleLayout({
         />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content={''} />
+        <meta property="twitter:domain" content={host} />
         <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
         <meta name="twitter:title" content={meta.title} />
         <meta name="twitter:description" content={meta.description} />
