@@ -54,12 +54,12 @@ export function ArticleLayout({
         />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content={host} />
-        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
+        <meta name="twitter:domain" content={host} />
+        <meta name="twitter:url" content={`${siteUrl}${router.asPath}`} />
         <meta name="twitter:title" content={meta.title} />
         <meta name="twitter:description" content={meta.description} />
         <meta
-          property="twitter:image"
+          name="twitter:image"
           content={`${siteUrl}/api/og?title=${meta.title}&date=${formatDate(meta.date)}`}
         />
         
