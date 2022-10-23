@@ -35,6 +35,10 @@ export function ArticleLayout({
       <Head>
         <title>{`${meta.title} - Alex Kearns`}</title>
         <meta name="description" content={meta.description} />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_SITE_URL}/api/og?title=${meta.title}&date=${meta.date}`}
+        />
       </Head>
       <Container className="mt-16 lg:mt-32">
         <div className="xl:relative">
