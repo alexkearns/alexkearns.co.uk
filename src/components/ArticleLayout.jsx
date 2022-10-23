@@ -32,7 +32,7 @@ export function ArticleLayout({
 
   let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   // Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-  if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
     siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   }
 
@@ -42,7 +42,7 @@ export function ArticleLayout({
         <title>{`${meta.title} - Alex Kearns`}</title>
         <meta name="description" content={meta.description} />
 
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:url" content={`${siteUrl}${router.asPath}`} />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
@@ -52,8 +52,8 @@ export function ArticleLayout({
         />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content={window.location.hostname} />
-        <meta property="twitter:url" content={window.location.href} />
+        <meta property="twitter:domain" content={''} />
+        <meta property="twitter:url" content={`${siteUrl}${router.asPath}`} />
         <meta name="twitter:title" content={meta.title} />
         <meta name="twitter:description" content={meta.description} />
         <meta
