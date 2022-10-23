@@ -41,10 +41,26 @@ export function ArticleLayout({
       <Head>
         <title>{`${meta.title} - Alex Kearns`}</title>
         <meta name="description" content={meta.description} />
+
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:description" content={meta.description} />
         <meta
           property="og:image"
           content={`${siteUrl}/api/og?title=${meta.title}&date=${formatDate(meta.date)}`}
         />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content={window.location.hostname} />
+        <meta property="twitter:url" content={window.location.href} />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta
+          property="twitter:image"
+          content={`${siteUrl}/api/og?title=${meta.title}&date=${formatDate(meta.date)}`}
+        />
+        
       </Head>
       <Container className="mt-16 lg:mt-32">
         <div className="xl:relative">
