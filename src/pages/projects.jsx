@@ -2,8 +2,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import {
-  GitHubIcon
-} from '@/components/SocialIcons'
+  GitHubIcon,
+  GlobeIcon
+} from '@/components/Icons'
 
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
@@ -20,6 +21,12 @@ const projects = [
     description: 'Creates an end-to-end Snowpipe demo with S3 as a source using Terraform as the Infrastructure as Code tool.',
     link: { href: 'https://github.com/alexkearns/snowpipe-terraform-demo', label: 'github.com' },
     logo: GitHubIcon,
+  },
+  {
+    name: 'AWS Subnet Splitter',
+    description: 'A web application that simplifies the creation of Infrastructure-as-Code templates for VPCs and Subnets.',
+    link: { href: 'https://aws-subnet-splitter.alexkearns.co.uk', label: 'aws-subnet-splitter.alexkearns.co.uk' },
+    logo: GlobeIcon,
   }
 ]
 

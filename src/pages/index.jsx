@@ -12,7 +12,7 @@ import {
   InstagramIcon,
   GitHubIcon,
   LinkedInIcon,
-} from '@/components/SocialIcons'
+} from '@/components/Icons'
 import image1 from '@/images/photos/image-1.jpeg'
 import image2 from '@/images/photos/image-2.jpeg'
 import image3 from '@/images/photos/image-3.jpeg'
@@ -234,7 +234,7 @@ function Resume() {
   let resume = [
     {
       company: 'Inawisdom',
-      title: 'Senior Consultant',
+      title: 'Lead Consultant',
       logo: logoInawisdom,
       start: '2021',
       end: {
