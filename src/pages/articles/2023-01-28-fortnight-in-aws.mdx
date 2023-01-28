@@ -1,0 +1,80 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+
+export const meta = {
+  author: 'Alex Kearns',
+  date: '2023-01-28',
+  title: 'The past fortnight in the world of AWS',
+  description: "A review of AWS announcements from the past two weeks."
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+## Introduction
+
+I'm taking a slightly different tack for this blog post, highlighting my pick
+of the most exciting announcements in the world of AWS from the last two weeks.
+It's going to be a short post this week as I've got some talks and workshops
+coming up to plan for!
+
+## Announcements
+
+### OpenSearch Serverless goes GA
+
+Let's start off with OpenSearch Serverless becoming generally available. The
+service was announced at re:Invent 2022 and has been available for the public
+to try out since then. It's fair to say that the reaction to the announcement
+has been _mixed_ to say the least. A debate has certainly been sparked around
+exactly what the 'Serverless' designation means nowadays, and whether it is
+just becoming a marketing buzzword. Allen Helton's [blog post](https://www.readysetcloud.io/blog/allen.helton/i-dont-know-what-serverless-is-anymore/)
+is a brilliant take on it all, titled "I don't know what Serverless is anymore".
+
+With regards to OpenSearch Serverless itself, it's great to have another option
+for how to run these workloads - especially if it involves less work for
+developers. Auto-scaling, less configuration and easy provisioning is all a win
+in my book - even if it doesn't truly fit the 'scale-to-zero' characteristic
+that is most associated with Serverless technologies now.
+[The announcement can be found here.](https://aws.amazon.com/about-aws/whats-new/2023/01/amazon-opensearch-serverless-available/)
+
+### Runtime management controls for AWS Lambda
+
+Previously, AWS have always patched the underlying software that makes up the
+chosen runtime versions without customers needing to take any action. This is
+perfect for most customers as you'll consistently get security updates.
+
+In some cases, especially where software is so mission-critical that specific
+minor versions of dependencies must be tested before release, the only way to
+previously ensure this was to use Lambda container images. With this new
+feature announced, customers have full control of how runtime updates are
+applied to Lambda functions.
+[You can find out more here.](https://aws.amazon.com/about-aws/whats-new/2023/01/runtime-management-controls-aws-lambda/)
+
+### Lambda maximum concurrency for SQS event sources
+
+The final announcement from AWS that I want to highlight is a new way to
+limit concurrency of Lambda functions when they are acting as consumers of an
+SQS queue. There have previously been some less than ideal ways to limit
+concurrency, at the cost of having to sometimes retry function invocations due
+to throttling.
+
+With this new announcement, the level of concurrency can now be set on the event
+source mapping itself rather than having to use the Lambda function reserved
+concurrency feature.
+
+You may want to limit concurrency in cases where downstream resources are limited,
+such as databases where a high number of parallel connections is not advisable
+(e.g. Redshift).
+[More can be read about the new option on the Event Source Mapping here.](https://aws.amazon.com/about-aws/whats-new/2023/01/aws-lambda-maximum-concurrency-amazon-sqs-event-source/)
+
+### AWS Fundamentals book
+
+This isn't an official AWS release, but has certainly gained some traction within
+the community. There are countless resources out there to help people pass
+certifications and there's nothing wrong with that. A gap in the market exists
+for material that solely aims to teach the fundamentals, the must-knows for
+using AWS day to day.
+
+This new book looks like a really great filler of that gap, the content looks
+really strong and has had raving reviews from the community.
+
+[The book is available here.](https://awsfundamentals.com)
+
