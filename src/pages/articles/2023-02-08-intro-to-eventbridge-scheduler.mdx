@@ -1,0 +1,90 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+
+export const meta = {
+  author: 'Alex Kearns',
+  date: '2023-02-08',
+  title: 'Intro to EventBridge Scheduler',
+  description: "A quick look at one of the newest services for event-driven architectures, EventBridge Scheduler."
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+## tl;dr
+
+EventBridge Scheduler is a new feature within the EventBridge suite of tools, designed to
+specifically handle those cases where a scheduled EventBridge Rule used to be used. If you would
+normally reach for the `rate(...)` or `cron(...)` expressions with an EventBridge Rule, you should
+be taking a look at EventBridge Scheduler. It has a much wider feature set and some real quality of
+life improvements.
+
+## A closer look
+
+There are 4 key sections within EventBridge Scheduler that I want to take a look at today. These are:
+timezone support; flexible time windows; SDK integration; point-in-time events.
+
+### Timezones
+
+Let's get started with timezone support. It's fair to say I was pretty excited when this got
+announced. Any developer who says they've never faced issues with managing timezones, especially
+when daylight savings time gets into the mix - is probably being less than truthful.
+
+EventBridge Scheduler supports the ability to choose what timezone you would like your schedules to
+run on. This could be something like `Europe/London`, or you can still use `UTC` if that's what your
+application is designed for. We do love backwards compatibility!
+
+This addition means that when a schedule is defined for 8am every day via a Cron expression, if you
+set the timezone to something other than `UTC` then it'll automatically be adjusted when the clocks
+change in the Autumn and Spring. Useful indeed.
+
+### Flexible time windows
+
+Flexible time windows are an easy way to add variance to the time that a scheduled action takes
+place. This is especially useful if you have lots of actions scheduled for the same time that all
+rely on the same downstream resource.
+
+For example, imagine an application where a users are subscribed to a newsletter after they've
+signed up for an account. An EventBridge Schedule is set up to send this email. The service
+that's being used to send the emails is rate limited. Using flexible time windows, we can add
+15 mins, 30 mins, 1 hour, 2 hours or 4 hours variance to the scheduled action time to spread out
+the execution of events and avoid exceeding rate limits.
+
+### SDK integration
+
+This is another really nice addition to EventBridge's features. AWS call this "Universal targets".
+Ultimately, this means that the vast majority of actions supported by the AWS API are now able to be
+directly invoked by an EventBridge Schedule. For example, `arn:aws:scheduler:::aws-sdk:glue:startJobRun`
+could be set as a target for a schedule.
+
+I'm all for any efforts to reduce the amount of 'glue code' that needs to be written in order to
+join up multiple AWS services.
+
+### Point-in-time events
+
+The final part of EventBridge Scheduler that I wanted to highlight was the ability to create one-off
+point in time schedules.
+
+Previously, there was no way with EventBridge to trigger actions at a given point in time, just on a
+recurring basis. There was a common pattern which involved using DynamoDB's item TTL functionality
+in combination with DynamoDB streams - however there were drawbacks with this around the precision of
+TTL as well as the increased burden on maintaining another system in your overall architecture.
+
+One-off schedules are implemented via the `at(...)` expression, joining `cron` and `rate`. This type
+of event lends itself naturally to per-user events which raises the question of whether it's
+scalable enough to support this use-case. Good news on that front! By default, there's a quota of
+1 million schedules per account, but this is adjustable.
+
+One point to take note of is that after a one-off event has run, it doesn't automatically delete.
+This means that some manual tidying up will be required over time. The [ListSchedules](https://docs.aws.amazon.com/scheduler/latest/APIReference/API_ListSchedules.html)
+API does return a `State` property that can be either `ENABLED` or `DISABLED` - I'm curious to see
+whether this can indicate an already actioned one-off event to help automation of tidying up.
+
+## Summary
+
+In summary, EventBridge Scheduler is a great improvement on the standard EventBridge scheduled rules
+and adds some much needed features.
+
+## Useful links
+
+- [AWS documentation](https://docs.aws.amazon.com/scheduler/latest/UserGuide/what-is-scheduler.html)
+- [AWS marketing page](https://aws.amazon.com/eventbridge/scheduler/)
+
