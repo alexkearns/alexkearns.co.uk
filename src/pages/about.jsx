@@ -26,7 +26,7 @@ function SocialLink({ className, href, children, icon: Icon }) {
     <li className={clsx(className, 'flex')}>
       <Link
         href={href}
-        className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
+        className="group flex text-sm font-medium transition text-zinc-200 hover:text-teal-500"
       >
         <Icon className="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-teal-500" />
         <span className="ml-4">{children}</span>
@@ -84,16 +84,16 @@ export default function About() {
                 src={portraitImage}
                 alt=""
                 sizes="(min-width: 1024px) 32rem, 20rem"
-                className="aspect-square rotate-3 rounded-2xl bg-zinc-100 object-cover dark:bg-zinc-800"
+                className="aspect-square rotate-3 rounded-2xl object-cover bg-zinc-800"
               />
             </div>
           </div>
           <div className="lg:order-first lg:row-span-2">
-            <h1 className="text-zinc-800 dark:text-zinc-100">
+            <h1 className="text-zinc-100">
               <span className="text-4xl sm:text-5xl font-bold block tracking-tight">Hi! I’m Alex.</span>
               <span className="text-2xl font-medium block mt-2">I live in the UK, where I help businesses migrate their applications to AWS and realise the benefits of the cloud.</span>
             </h1>
-            <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
+            <div className="mt-6 space-y-7 text-base text-zinc-400">
               <p>
                 I&apos;ve always been a bit of a geek. Interested in computers from an early age, whether it was in relation to software 
                 or hardware. I remember writing my first HTML at school and being hooked on the process of writing code that changed 
@@ -140,7 +140,7 @@ export default function About() {
               <SocialLink
                 href="mailto:alex@alexkearns.co.uk"
                 icon={MailIcon}
-                className="mt-8 border-t border-zinc-100 pt-8 dark:border-zinc-700/40"
+                className="mt-8 border-t pt-8 border-zinc-700/40"
               >
                 alex@alexkearns.co.uk
               </SocialLink>
