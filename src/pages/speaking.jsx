@@ -2,8 +2,20 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import { Card } from '@/components/Card'
-import { Section } from '@/components/Section'
 import { SimpleLayout } from '@/components/SimpleLayout'
+
+import nordevcon23Image from '@/images/events/nordevcon-23.png'
+import nordevcon22Image from '@/images/events/nordevcon-22.png'
+import nordevServerlessStreamImage from '@/images/events/nordev-serverless-stream.png'
+import nordevServerlessWhatWhyHowImage from '@/images/events/nordev-serverless-what-why-how.png'
+import techToastColchesterImage from '@/images/events/tech-toast-colchester.png'
+import techToastNorwichImage from '@/images/events/tech-toast-norwich.png'
+import ueaMoneyhackImage from '@/images/events/uea-moneyhack.png'
+import ipswichAwsUserGroupImage from '@/images/events/ipswich-aws-user-group.png'
+import ambassadorSummit22Image from '@/images/events/ambassador-summit-22.png'
+import cloudContainerConundrumImage from '@/images/events/cloud-container-conundrum.png'
+import comsum22Image from '@/images/events/comsum-22.png'
+import owaspImage from '@/images/events/owasp.png'
 
 let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 // Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
@@ -12,23 +24,157 @@ if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !==
 }
 
 const { host } = new URL(siteUrl)
-
-function SpeakingSection({ children, ...props }) {
-  return (
-    <Section {...props}>
-      <div className="space-y-16">{children}</div>
-    </Section>
-  )
+const eventAppearanceType = {
+  CONF: 'Conference',
+  TALK: 'Talk',
+  STREAM: 'Live Stream',
+  POD: 'Podcast'
 }
+const eventAppearance = [
+  {
+    title: "Serverless orchestration: Events, Queues, State Machines, oh my!",
+    type: eventAppearanceType.CONF,
+    event: "nor(DEV):con",
+    image: {
+      src: nordevcon23Image
+    },
+    date: Date.parse('23 February 2023'),
+    href: "https://www.youtube.com/watch?v=3ktFKGW8tQI",
+    cta: "Watch video"
+  },
+  {
+    title: "The Cloud Container Conundrum",
+    type: eventAppearanceType.TALK,
+    event: "The bAWSton User Group (Boston, US)",
+    image: {
+      src: cloudContainerConundrumImage
+    },
+    date: Date.parse('9 March 2023'),
+    href: "https://alexkearns-aws-community-public-storage.s3.eu-west-2.amazonaws.com/baws-user-group-the-cloud-container-conundrum.pdf",
+    cta: "View slides"
+  },
+  {
+    title: "Grab your digital swimwear, we're diving into a data lake",
+    type: eventAppearanceType.CONF,
+    event: "AWS Community Summit",
+    date: Date.parse('22 September 2022'),
+    image: {
+      src: comsum22Image
+    },
+    href: "https://alexkearns-aws-community-public-storage.s3.eu-west-2.amazonaws.com/aws-comsum-22.pdf",
+    cta: "View slides"
+  },
+  {
+    title: "Democratising Machine Learning for Business",
+    type: eventAppearanceType.CONF,
+    event: "nor(DEV):con",
+    date: Date.parse('17 June 2022'),
+    image: {
+      src: nordevcon22Image
+    },
+    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/democratising_ml_for_business.pdf",
+    cta: "View slides"
+  },
+  {
+    title: "Controlled Empowerment: A tale of two sides",
+    type: eventAppearanceType.TALK,
+    event: "AWS Ambassador EMEA Summit",
+    date: Date.parse('29 June 2022'),
+    image: {
+      src: ambassadorSummit22Image
+    },
+    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/controlled_empowerment_a_tale_of_two_sides.pdf",
+    cta: "View slides"
+  },
+  {
+    title: "The best practices of working securely on AWS",
+    type: eventAppearanceType.TALK,
+    event: "OWASP Suffolk Chapter",
+    image: {
+      src: owaspImage
+    },
+    date: Date.parse('29 March 2022'),
+    href: "https://www.youtube.com/watch?v=1dznfbf_gEQ",
+    cta: "Watch video"
+  },
+  {
+    title: "Serverless: What, why, how?",
+    type: eventAppearanceType.TALK,
+    event: "Norfolk Developers",
+    date: Date.parse('16 September 2021'),
+    image: {
+      src: nordevServerlessWhatWhyHowImage
+    },
+    href: "https://www.youtube.com/watch?v=6hBmjYPNdnc",
+    cta: "Watch video"
+  },
+  {
+    title: "AWS App Runner: The what, the why and the how",
+    type: eventAppearanceType.TALK,
+    event: "Ipswich AWS User Group",
+    image: {
+      src: ipswichAwsUserGroupImage
+    },
+    date: Date.parse('17 June 2021'),
+    href: "https://www.youtube.com/watch?v=b1u3cFYs6fw",
+    cta: "Watch video"
+  },
+  {
+    title: "Handling Peaks in Website Traffic",
+    type: eventAppearanceType.TALK,
+    event: "TechEast: Tech and Toast",
+    image: {
+      src: techToastColchesterImage
+    },
+    date: Date.parse('14 February 2020'),
+    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/tech-and-toast-peaks-in-website-traffic.pdf",
+    cta: "View slides"
+  },
+  {
+    title: "What is Local Recall?",
+    type: eventAppearanceType.TALK,
+    event: "TechEast: Tech and Toast",image: {
+      src: techToastNorwichImage
+    },
+    date: Date.parse('22 November 2019'),
+    href: "https://www.youtube.com/watch?v=mF4cX0dINFk",
+    cta: "Watch video"
+  },
+  {
+    title: "What is a chatbot?",
+    type: eventAppearanceType.TALK,
+    event: "UEA Moneyhack",image: {
+      src: ueaMoneyhackImage
+    },
+    date: Date.parse('16 November 2019'),
+    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/uea-moneyhack.pdf",
+    cta: "View slides"
+  },
+  {
+    title: "Brewing a serverless application",
+    type: eventAppearanceType.STREAM,
+    event: "Norfolk Developers",
+    image: {
+      src: nordevServerlessStreamImage,
+    },
+    date: Date.parse('23 March 2022'),
+    href: "https://www.youtube.com/playlist?list=PLc8-tQY65nvVLAKiHuLLyQxnw7dgNxJ43",
+    cta: "Watch stream recording"
+  },
+]
 
-function Appearance({ title, description, event, cta, href }) {
+function Appearance({ title, event, date, image, type, cta, href }) {
   return (
-    <Card as="article">
+    <Card>
       <Card.Title as="h3" href={href}>
         {title}
       </Card.Title>
-      <Card.Eyebrow decorate>{event}</Card.Eyebrow>
-      <Card.Description>{description}</Card.Description>
+      <Card.Eyebrow as="div" decorate>
+        <div>{event}</div>
+        <div>{new Date(date).toLocaleDateString("en-GB")}</div>
+      </Card.Eyebrow>
+      <Card.Tags tags={[type]} />
+      {image && <><div className={"flex-1"} /><Card.Image src={image.src} alt={image.alt}/></>}
       <Card.Cta>{cta}</Card.Cta>
     </Card>
   )
@@ -67,98 +213,19 @@ export default function Speaking() {
       </Head>
       <SimpleLayout
         title="I’ve spoken at all kinds of events and am always open to trying new formats."
-        intro="I really love delivering content live. It's incredibly nerve-wracking but it allows for the building of rapport with an audience and instant feedback on whether I'm pitching
-          my talk at the right level."
+        intro="I really love delivering content live. It's still incredibly nerve-wracking but I wouldn't change it!"
       >
-        <div className="space-y-20">
-          <SpeakingSection title="Conferences">
+        <ul
+          role="list"
+          className="grid grid-cols-1 gap-x-16 gap-y-20 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {eventAppearance.sort((a,b) => b.date-a.date).map((appearance, key) =>
             <Appearance
-              title="Grab your digital swimwear, we're diving into a data lake"
-              description="An architectural overview of data lakes, the alternative ways of building a data platform and how to get started with implementation on AWS."
-              event="AWS Community Summit 2022"
-              cta="Video coming soon..."
+              key={key}
+              {...appearance}
             />
-            <Appearance
-              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/democratising_ml_for_business.pdf"
-              title="Democratising Machine Learning for Business"
-              description="A session designed to give an audience new to machine learning enough of an overview to have informed conversations and recognise opportunities to drive efficiencies in their businesses."
-              event="nor(DEV):con 2022"
-              cta="View slides"
-            />
-          </SpeakingSection>
-          <SpeakingSection title="Events">
-            <Appearance
-              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/controlled_empowerment_a_tale_of_two_sides.pdf"
-              title="Controlled Empowerment: A tale of two sides"
-              description="A 15 minute lightning talk delivered to my fellow AWS Ambassadors about how developers can be empowered to work freely on AWS without introducing
-                unacceptable security risks."
-              event="AWS Ambassador EMEA Summit, June 2022"
-              cta="View slides"
-            />
-            <Appearance
-              href="https://www.youtube.com/watch?v=1dznfbf_gEQ"
-              title="The best practices of working securely on AWS"
-              description="I was lucky enough to be invited to speak to the OWASP Suffolk Chapter meetup all about the best practices of working
-                securely on AWS, focusing on easy wins for establishing solid security posture as well as making the most of AWS'
-                managed security services - a sure-fire way to take the load off of a security professional new to cloud."
-              event="OWASP Suffolk, March 2022"
-              cta="Watch video"
-            />
-            <Appearance
-              href="https://www.youtube.com/watch?v=6hBmjYPNdnc"
-              title="Serverless: What, why, how?"
-              description="Norfolk Developers were kind enough to let me talk to their community all about serverless, particularly on AWS. 
-                What I really wanted viewers to get from this talk was an understanding of what serverless really was, bust some of the common myths, talk through
-                why it's a good choice of architecture (and why it isn't always) as well as just how a developer can get started with it."
-              event="Norfolk Developers, September 2021"
-              cta="Watch video"
-            />
-            <Appearance
-              href="https://www.youtube.com/watch?v=b1u3cFYs6fw"
-              title="AWS App Runner: The what, the why and the how"
-              description="A talk all about App Runner, a(nother) new service for running containers on AWS designed for simplicity - AWS Lightsail style."
-              event="Ipswich AWS User Group, June 2021"
-              cta="Watch video"
-            />
-            <Appearance
-              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/tech-and-toast-peaks-in-website-traffic.pdf"
-              title="Tech and Toast: Handling Peaks in Website Traffic"
-              description="I opted to talk about scaling websites / web applications. This was a topic that has been majority self taught and that I have a real interest in moving into as a career. 
-                The one hesitation I had about giving speaking on this was that the audience were likely to be only about 1/3 technical. When the topic has potential to be so complex from a technical perspective, 
-                I wanted to make sure that I pitched the concepts at the right level. I'm pleased to say that the talk went very well, drawing in the biggest crowd yet at a Tech and Toast event."
-              event="Tech East, February 2020"
-              cta="View slides"
-            />
-            <Appearance
-              href="https://www.youtube.com/watch?v=mF4cX0dINFk"
-              title="Tech and Toast: Local Recall"
-              description="I spoke about the Local Recall project that I'd worked on (with some technical bits thrown in). Given the size of the project, fitting it all in a 15 minute talk was quite 
-                daunting. To make sure that I was going into the right amount of detail about the right bits, I did a dry run with the ubisend team the day before. After a couple of last minute tweaks - it was good to go! 
-                Safe to say, as it was my first proper public speaking event, I was a little nervous. A lot more people turned up than I was expecting which didn't help with that! After speaking to a few people afterwards, it seemed to have gone well which I was pleased with."
-              event="Tech East, November 2019"
-              cta="Watch video"
-            />
-            <Appearance
-              href="https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/uea-moneyhack.pdf"
-              title="What is a chatbot?"
-              description="With a colleague at ubisend, I gave a talk to a group of schoolchildren taking part in the UEA Moneyhack programme - designed to give them an 
-                introduction into the world of FinTech. The talk gave an introduction to the world of chatbots "
-              event="UEA Moneyhack, October 2019"
-              cta="View slides"
-            />
-          </SpeakingSection>
-          <SpeakingSection title="Live streams">
-            <Appearance
-              href="https://www.youtube.com/playlist?list=PLc8-tQY65nvVLAKiHuLLyQxnw7dgNxJ43"
-              title="Brewing a serverless application"
-              description="Sticking with the serverless theme that I'd delivered before to a Norfolk Developers audience, I decided to live stream
-                the building of a simple web application using React as a front-end (very much not my specialty, you've been warned!)
-                and a Python backend making use of AWS serverless services such as Lambda functions, API Gateway and DynamoDB."
-              event="Norfolk Developers, March 2022"
-              cta="Watch video"
-            />
-          </SpeakingSection>
-        </div>
+          )}
+        </ul>
       </SimpleLayout>
     </>
   )
