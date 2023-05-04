@@ -21,7 +21,8 @@ import image5 from '@/images/photos/image-5.jpeg'
 import logoAws from '@/images/logos/aws.png'
 import logoBt from '@/images/logos/bt.png'
 import logoUbisend from '@/images/logos/ubisend.png'
-import logoInawisdom from '@/images/logos/inawisdom.jpeg'
+import logoInawisdom from '@/images/logos/inawisdom.jpg'
+import logoUbertas from '@/images/logos/ubertas.jpg'
 import { generateRssFeed } from '@/lib/generateRssFeed'
 import { getAllArticles } from '@/lib/getAllArticles'
 import { formatDate } from '@/lib/formatDate'
@@ -222,8 +223,8 @@ function Achievements() {
           </li>
         ))}
       </ol>
-      <Button href="https://www.credly.com/users/alexkearns/badges" variant="secondary" className="group mt-6 w-full">
-        View 5x AWS Certifications
+      <Button target="_blank" href="https://www.credly.com/users/alexkearns/badges" variant="secondary" className="group mt-6 w-full">
+        View 8x AWS Certifications
         <ArrowTopRightOnSquare className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
       </Button>
     </div>
@@ -233,14 +234,21 @@ function Achievements() {
 function Resume() {
   let resume = [
     {
-      company: 'Inawisdom',
-      title: 'Lead Consultant',
-      logo: logoInawisdom,
-      start: '2021',
+      company: 'Ubertas Consulting',
+      title: 'Principal Solutions Architect',
+      logo: logoUbertas,
+      start: '2023',
       end: {
         label: 'Present',
         dateTime: new Date().getFullYear(),
       },
+    },
+    {
+      company: 'Inawisdom',
+      title: 'Lead Consultant',
+      logo: logoInawisdom,
+      start: '2021',
+      end: '2023',
     },
     {
       company: 'BT',
@@ -298,10 +306,6 @@ function Resume() {
           </li>
         ))}
       </ol>
-      {/* <Button href="#" variant="secondary" className="group mt-6 w-full">
-        Download CV
-        <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
-      </Button> */}
     </div>
   )
 }
@@ -341,7 +345,7 @@ export default function Home({ articles }) {
     <>
       <Head>
         <title>
-          Alex Kearns - AWS Data Consultant
+          Alex Kearns - AWS Consultant
         </title>
         <meta
           name="description"
@@ -349,31 +353,30 @@ export default function Home({ articles }) {
         />
         <meta property="og:url" content={`${siteUrl}${router.asPath}`} />
         <meta property="og:type" content="webpage" />
-        <meta property="og:title" content="Alex Kearns - AWS Data Consultant" />
+        <meta property="og:title" content="Alex Kearns - AWS Consultant" />
         <meta property="og:description" content={description} />
         <meta
           property="og:image"
-          content={`${siteUrl}/api/og?title=Alex Kearns - AWS Data Consultant`}
+          content={`${siteUrl}/api/og?title=Alex Kearns - AWS Consultant`}
         />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:domain" content={host} />
         <meta name="twitter:url" content={`${siteUrl}${router.asPath}`} />
-        <meta name="twitter:title" content="Alex Kearns - AWS Data Consultant" />
+        <meta name="twitter:title" content="Alex Kearns - AWS Consultant" />
         <meta name="twitter:description" content={description} />
         <meta
           property="twitter:image"
-          content={`${siteUrl}/api/og?title=Alex Kearns - AWS Data Consultant`}
+          content={`${siteUrl}/api/og?title=Alex Kearns - AWS Consultant`}
         />
       </Head>
-      <Container className="mt-9">
+      <Container className="mt-16 sm:mt-32">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
             Usually found with my head in the clouds.
           </h1>
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Inawisdom as a Senior Solution Engineer building brilliant
-            things data and machine learning for clients of all sizes.
+            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping clients of all sizes to migrate their applications to AWS and modernise to make the most of cloud.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink

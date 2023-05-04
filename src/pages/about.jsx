@@ -48,7 +48,7 @@ function MailIcon(props) {
 
 export default function About() {
   let router = useRouter()
-  const description = "I’m Alex Kearns. I live in the UK, where I build data platforms on AWS to enable businesses to extract insights from their most valuable asset."
+  const description = "I’m Alex Kearns. I live in the UK, where I help businesses migrate their applications to AWS and realise the benefits of the cloud."
   return (
     <>
       <Head>
@@ -91,7 +91,7 @@ export default function About() {
           <div className="lg:order-first lg:row-span-2">
             <h1 className="text-zinc-800 dark:text-zinc-100">
               <span className="text-4xl sm:text-5xl font-bold block tracking-tight">Hi! I’m Alex.</span>
-              <span className="text-2xl font-medium block mt-2">I live in the UK, where I build data platforms on AWS to enable businesses to extract insights from their most valuable asset.</span>
+              <span className="text-2xl font-medium block mt-2">I live in the UK, where I help businesses migrate their applications to AWS and realise the benefits of the cloud.</span>
             </h1>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
               <p>
@@ -114,8 +114,12 @@ export default function About() {
                 required for it to be used on sensitive projects.
               </p>
               <p>
-                Today, I&apos;m working for Inawisdom - an AWS Premier Partner specialising in helping businesses to extract usable insights from 
-                the data that they have. This is usually via the means of new (or improved) data platforms, or via machine learning.
+                After BT, I moved to Inawisdom - an AWS Partner specialising in helping businesses to extract usable insights from
+                the data that they have. This was typically via the means of new (or improved) data platforms, or via machine learning.
+              </p>
+              <p>
+                Today, I&apos;m working at Ubertas Consulting. Ubertas are an AWS Advanced Partner that focus on helping customers to migrate to AWS as
+                well as architecting their workloads in according with AWS best practices.
               </p>
             </div>
           </div>
