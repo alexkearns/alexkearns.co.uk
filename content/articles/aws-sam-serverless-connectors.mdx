@@ -1,0 +1,190 @@
+---
+author: 'Alex Kearns'
+date: '2022-10-08'
+title: 'AWS SAM Serverless Connectors'
+description: 'A quick look at a new feature available within AWS SAM templates, designed to ease the pains of manually creating IAM policies.'
+---
+
+Yesterday, [AWS announced](https://aws.amazon.com/about-aws/whats-new/2022/10/aws-sam-serverless-connectors/) a new feature for AWS SAM called Serverless Connectors. I was particularly excited about this one for two reasons.
+
+Firstly - I often see tutorials gloss over the implementation of the principle of least privilege when it comes to identity and access management (IAM). SAM Serverless Connectors seeks to correct this by making it easy to create `AWS::IAM::ManagedPolicy` resources just by defining a source resource, destination resource, and type/s of permission (e.g. `Read` or `Write`).
+
+Secondly - in a meeting I had recently with the Serverless product team at AWS via the [Community Builders](https://aws.amazon.com/developer/community/community-builders/) programme, I heard that a feature to solve this problem was on the way. I was expecting that it might be something announced at re:Invent, so to receive it this early was a pleasant surprise.
+
+All of the source code that makes up the example application detailed in this article is available on GitHub in the [aws-sam-serverless-connector-demo](https://github.com/alexkearns/aws-sam-serverless-connector-demo) repository.
+
+## Getting started
+
+It's worth pointing out at this stage that in order to make use of any features of AWS SAM, the serverless transform needs to be added to the top level of the CloudFormation template. This instructs the CloudFormation service to convert the conceptual `AWS::Serverless::*` resources to the underlying CloudFormation resources.
+
+```yaml
+Transform: AWS::Serverless-2016-10-31
+```
+
+In this article we'll look at three examples where a IAM managed policy is generated to grant access to a particular resource, scoped down to `Read` or `Write` privileges. The way that the `AWS::Serverless::Connector` resource works is that a `Source` needs to be specified. We'll be using a Lambda function as the source. Normally when writing an IAM policy a source wouldn't need to be specified, so this may feel a little strange. The reason for specifying the `Source` is that it allows SAM to be smart and automatically attach the `AWS::IAM::ManagedPolicy` that is created to the role that is created for the Lambda function. Winner!
+
+When the Lambda function is defined, nothing out of the ordinary needs to be specified.
+
+```yaml
+ExampleFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    Timeout: 3
+    CodeUri: hello_world/
+    Handler: app.lambda_handler
+    Runtime: python3.9
+    Architectures:
+      - x86_64
+```
+
+## Step Functions State Machine
+
+The first example we'll explore is if a Lambda function needs to interact with a Step Functions State Machine. The State Machine itself is defined as usual. The below snippet shows a sample `AWS::Serverless::StateMachine` resource. The policies and definition are for example only, they are not relevant to the function of the Serverless Connectors released yesterday. 
+
+```yaml
+ExampleStateMachine:
+  Type: AWS::Serverless::StateMachine
+  Properties:
+    Policies:
+      - Version: '2012-10-17' 
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:ListBucket
+            Resource: '*'
+    Definition:
+      StartAt: Succeed
+      States:
+        Succeed:
+          Type: Succeed
+```
+
+Now we get to the good stuff. To create an IAM managed policy to allow `Write` access to the resource represented by the `ExampleStateMachine` logical ID. By specifying `ExampleFunction` as the source, the created policy will be attached to the Lambda function execution role. It is worth mentioning at this stage that `Source` and `Destination` don't just support the referencing another resource in the stack via a logical ID in the `Id` key. Support for keys such as `Arn` is also there to cover off those cases where a you may want to connect resources that aren't necessarily in the same stack.
+
+```yaml
+FunctionToStateMachineConnector:
+  Type: AWS::Serverless::Connector
+  Properties:
+    Source:
+      Id: ExampleFunction
+    Destination:
+      Id: ExampleStateMachine
+    Permissions:
+      - Write
+```
+
+When the stack has been created, it's possible to see the policy created in the IAM console. I must say that when I heard about this feature, I was a little worried that it might be provision overly-permissive policies. I really like the fact that `Read` and `Write` focuses on *application* level permissions rather than *infrastructure*. For example, the `Write` permissions connecting to a state machine could have granted permissions to edit or even delete the resource. I'd say the product team have pretty much hit the nail on the head here.
+
+```yaml
+Version: '2012-10-17'
+Statement:
+- Action:
+    - states:StartExecution
+    - states:StartSyncExecution
+  Resource:
+    - arn:aws:states:eu-west-1:012345678901:stateMachine:ExampleStateMachine-WnEDETcG2BGX
+  Effect: Allow
+- Action:
+    - states:StopExecution
+  Resource:
+    - arn:aws:states:eu-west-1:012345678901:execution:ExampleStateMachine-WnEDETcG2BGX:*
+  Effect: Allow
+```
+
+## DynamoDB Table
+
+The next example to look at is generating permissions for `Write` permissions on a DynamoDB.
+
+```yaml
+ExampleTable:
+  Type: AWS::Serverless::SimpleTable
+  Properties:
+    PrimaryKey:
+      Name: Id
+      Type: String
+
+FunctionToTableConnector:
+  Type: AWS::Serverless::Connector
+  Properties:
+    Source:
+      Id: ExampleFunction
+    Destination:
+      Id: ExampleTable
+    Permissions:
+      - Write
+```
+
+In the code snippet below is the IAM managed policy that's generated for `Write` permissions on a DynamoDB table. 
+
+```yaml
+Version: '2012-10-17'
+Statement:
+- Action:
+    - dynamodb:PutItem
+    - dynamodb:UpdateItem
+    - dynamodb:DeleteItem
+    - dynamodb:BatchWriteItem
+    - dynamodb:PartiQLDelete
+    - dynamodb:PartiQLInsert
+    - dynamodb:PartiQLUpdate
+  Resource:
+    - arn:aws:dynamodb:eu-west-1:012345678901:table/serverless-connector-resource-demo-ExampleTable-G4C7DC159EJL
+    - arn:aws:dynamodb:eu-west-1:012345678901:table/serverless-connector-resource-demo-ExampleTable-G4C7DC159EJL/index/*
+  Effect: Allow
+```
+
+## S3 Bucket
+
+The final example shows how to grant `Read` permissions on an S3 bucket from the Lambda function we created earlier. 
+
+```yaml
+ExampleBucket:
+  Type: AWS::S3::Bucket
+
+FunctionToBucketConnector:
+  Type: AWS::Serverless::Connector
+  Properties:
+    Source:
+      Id: ExampleFunction
+    Destination:
+      Id: ExampleBucket
+    Permissions:
+      - Read
+```
+
+Contained in the final code snippet is the IAM managed policy that's generated for `Read` permissions on a S3 bucket. 
+
+```yaml
+Version: '2012-10-17'
+Statement:
+- Action:
+    - s3:GetObject
+    - s3:GetObjectAcl
+    - s3:GetObjectLegalHold
+    - s3:GetObjectRetention
+    - s3:GetObjectTorrent
+    - s3:GetObjectVersion
+    - s3:GetObjectVersionAcl
+    - s3:GetObjectVersionForReplication
+    - s3:GetObjectVersionTorrent
+    - s3:ListBucket
+    - s3:ListBucketMultipartUploads
+    - s3:ListBucketVersions
+    - s3:ListMultipartUploadParts
+  Resource:
+    - arn:aws:s3:::serverless-connector-resource-demo-examplebucket-97ah5qo379y1
+    - arn:aws:s3:::serverless-connector-resource-demo-examplebucket-97ah5qo379y1/*
+  Effect: Allow
+```
+
+## Rounding up
+
+### Useful links
+
+- [Announcement blog post](https://aws.amazon.com/about-aws/whats-new/2022/10/aws-sam-serverless-connectors/)
+- [Connector referecnce](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/reference-sam-connector.html)
+- [`AWS::Serverless::Connector` resource](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-connector.html) 
+
+### Summary
+
+In summary, I'm really pleased by this new release. I believe it'll make it easier for people to learn and get started with building on AWS without creating drastically over permissive IAM policies.

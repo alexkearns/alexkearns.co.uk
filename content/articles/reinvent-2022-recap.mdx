@@ -1,0 +1,48 @@
+---
+author: 'Alex Kearns'
+date: '2022-12-24'
+title: 're:Invent 2022 wishlist - re:Visit'
+description: "Let's revisit my wishlist for re:Invent 2022 and see how many of my hopes came true."
+---
+
+I'm late to the party with some post-Vegas content, however sometimes you have to take a bit of time for yourself. I'm back just before Christmas to revisit the 9 items I had on my wishlist prior to re:Invent and see how many of them became reality.
+
+## Preventing non-VPC Lambda function outbound network access
+
+This one fell flat on its face. There weren't any announcements that were close to this functionality - there's always hope for next year if enough customers need it!
+
+## Executing a Step Functions workflow task as an assumed role
+
+This was announced before re:Invent, but I'm still counting it as a win. Task states in a Step Functions workflow can now specify an IAM role to assume when it executes. This *finally* opens up the door for easy cross-account orchestration with Step Functions. Documentation is [available here](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-task-state.html#task-state-example-credentials).
+
+## Globally catching failures within a Step Function workflow
+
+There were no announcements to help solve this problem. I'm still looking at different ways to handle this, perhaps a blog post for the future.
+
+## Step Functions custom intrinsic functions
+
+This was always going to be a long shot - and it didn't appear. At least there's always the possibility of building up a common set of Lambda functions that can be used by various Step Function workflows to carry out these small units of work.
+
+## AWS Serverless Specialty certification
+
+AWS announced the release of [new Serverless digital badges](https://aws.amazon.com/blogs/compute/introducing-new-aws-serverless-digital-learning-badges/). Whilst this isn't a full blown certification, it does pave the way to the introduction of other niche forms of certifying knowledge. The key differentiator between this digital badge and the usual certifications is the lack of requirement to conduct the test under exam conditions - in addition to this, it's free!
+
+I haven't taken the test yet, but reports from other members of the community say that it's of similar difficulty to a certification. Unfortunately there's no way to guarantee someone's not cheated on it, which makes it less reliable when it comes to validating someone's knowledge.
+
+## EventBridge graph visualisation
+
+There was no native solution released for this. This is something I really would like to see and it's a tough one to build a custom solution for.
+
+## Step Functions event source mappings
+
+I'm so pleased this problem had a solution announced for it. It was approached and named in a different way to how I imagined it, but [EventBridge Pipes](https://aws.amazon.com/eventbridge/pipes) appeared at re:Invent and allows for easy integration between various AWS services. This enables patterns such as SQS -> Step Function. Exciting!
+
+## CodeCommit UX improvements
+
+Whilst CodeCommit itself wasn't addressed, a new service was announced - [CodeCatalyst](https://aws.amazon.com/blogs/aws/announcing-amazon-codecatalyst-preview-a-unified-software-development-service/). CodeCatalyst seeks to be "A unified software development and delivery service ... \[enabling] software development teams to quickly and easily plan, develop, collaborate on, build, and deliver applications on AWS, reducing friction throughout the development lifecycle."
+
+[Corey Quinn's thread](https://twitter.com/QuinnyPig/status/1605624094451322881) about CodeCatalyst sums nicely just how much of a shift this is in terms of AWS' approach to developer experience - an area that has been lacking in previous years.
+
+## CloudFormation cost estimates
+
+There was nothing announced that solved the problem I proposed of automatic estimates based on specifying estimated usage (e.g. Lambda function invocations).
