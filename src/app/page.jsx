@@ -101,12 +101,12 @@ function Article({ article }) {
   return (
     <Card as="article">
       <Card.Title href={`/articles/${article.slug}`}>
-        {article.title}
+        {article.frontmatter.title}
       </Card.Title>
-      <Card.Eyebrow as="time" dateTime={article.date} decorate>
-        {formatDate(article.date)}
+      <Card.Eyebrow as="time" dateTime={article.frontmatter.date} decorate>
+        {formatDate(article.frontmatter.date)}
       </Card.Eyebrow>
-      <Card.Description>{article.description}</Card.Description>
+      <Card.Description>{article.frontmatter.description}</Card.Description>
       <Card.Cta>Read article</Card.Cta>
     </Card>
   )
