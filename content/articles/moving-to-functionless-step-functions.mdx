@@ -1,0 +1,215 @@
+---
+author: 'Alex Kearns'
+date: '2022-10-11'
+title: 'Moving to functionless Step Functions'
+description: 'Step Functions can do almost anything by invoking a Lambda function and running some Python code, but did you know that the workflow itself can do a lot without ever touching Lambda? Find out how.'
+---
+
+AWS Step Functions is up there with my favourite services. I love having the ability to orchestrate a set of tasks that interact with all sorts of services across the AWS ecosystem.
+
+When more complex work is required within a workflow, the typical pattern would be to invoke a Lambda function and perform the logic in there via some application code (for example, written in Python). However, this does not have to be the case. There are a number of features within Step Functions that allow you to directly integrate with services. This article will look at some of the more recent additions.
+
+For the purposes of demonstration, we're going to build a simple application that carries out the following steps:
+
+- Generate a unique identifier for this process
+- Get a object from S3 containing summary data about a person
+- Get a object from S3 containing detailed data about a person
+- Merge the summary and detailed data together
+- Put an object to S3 containing the merged result
+
+## The Lambda function way
+
+For completeness, included below is an example of how this task might be carried out using Lambda functions. Each state in the workflow invokes a different Lambda function that carries out the required task.
+
+```yaml
+Comment: An example state machine that uses Lambda functions to carry out certain tasks
+StartAt: Generate UUID for ingestion run
+States:
+  Generate UUID for ingestion run:
+    Type: Task
+    Resource: arn:aws:states:::lambda:invoke
+    Parameters:
+      FunctionName: ${UuidGeneratorFunctionArn}
+    ResultSelector:
+      uuid.$: $.Payload
+    ResultPath: $.ingestion
+    Next: Get summary file from S3
+  
+  Get summary file from S3:
+    Type: Task
+    Resource: arn:aws:states:::lambda:invoke
+    Parameters:
+      FunctionName: ${DownloadS3ObjectFunctionArn}
+      Payload:
+        bucket.$: $.file.bucket
+        key.$: $.file.summaryFile
+    ResultSelector:
+      data.$: $.Payload
+    ResultPath: $.summary
+    Next: Get detail file from S3
+  
+  Get detail file from S3:
+    Type: Task
+    Resource: arn:aws:states:::lambda:invoke
+    Parameters:
+      FunctionName: ${DownloadS3ObjectFunctionArn}
+      Payload:
+        bucket.$: $.file.bucket
+        key.$: $.file.detailFile
+    ResultSelector:
+      data.$: $.Payload
+    ResultPath: $.detail
+    Next: Merge summary and detail
+
+  Merge summary and detail:
+    Type: Task
+    Resource: arn:aws:states:::lambda:invoke
+    Parameters:
+      FunctionName: ${MergeJsonFunctionArn}
+      Payload:
+        left.$: $.summary.data
+        right.$: $.detail.data
+    ResultSelector:
+      data.$: $.Payload
+    ResultPath: $.merged
+    Next: Store object
+
+  Store object:
+    Type: Task
+    Resource: arn:aws:states:::lambda:invoke
+    Parameters:
+      FunctionName: ${PutS3ObjectFunctionArn}
+      Payload:
+        uuid.$: $.ingestion.uuid
+        bucket.$: $.file.bucket
+        body.$: $.merged.data
+    End: True
+```
+
+The Lambda functions invoked are all doing very simple tasks with just a few lines of code. For example, the following snippet shows the Python code that runs when the `Get summary file from S3` and `Get detail file from S3` states are executed. Don't get me wrong, this solution works. But it's definitely more complex than we need. Having 4 additional Lambda functions to worry about maintaining (and paying for) when we actually need 0 is not a good thing. We can improve this, let's go functionless!
+
+```python
+import json
+import boto3
+
+
+def lambda_handler(event, context):
+    """Sample Lambda function which downloads a JSON file from S3
+    and returns its contents
+
+    Parameters
+    ----------
+    event: dict, required
+        Input event to the Lambda function
+
+    context: object, required
+        Lambda Context runtime methods and attributes
+
+    Returns
+    ------
+        dict: the unserialized version of the JSON file
+    """
+    s3 = boto3.resource("s3")
+    object = s3.Object(
+        bucket_name=event["bucket"],
+        key=event["key"]
+    )
+
+    serialized_contents = object.get()
+    contents = json.load(serialized_contents["Body"])
+
+    return contents
+```
+
+## Let's go functionless
+
+The first state that we need to replace is `Generate UUID for ingestion run`. In September 2022, AWS launched a set of [new intrinsic functions](https://aws.amazon.com/blogs/compute/introducing-new-intrinsic-functions-for-aws-step-functions/) that made doing even more things possible without a Lambda function. This included a new `States.UUID` function. This generates a v4 UUID. 
+
+```yaml
+Generate UUID for ingestion run:
+  Type: Pass
+  Parameters:
+    uuid.$: States.UUID()
+  ResultPath: $.ingestion
+  Next: Get summary file from S3
+```
+
+The next set of states to be made functionless are the `Get summary file from S3` and `Get detail file from S3`. At the end of 2021, AWS announced a huge addition to Step Functions, [SDK integration](https://aws.amazon.com/about-aws/whats-new/2021/09/aws-step-functions-200-aws-sdk-integration/). This meant that you could call almost any service's API directly from the workflow. This really was the key to making a lot of workflows functionless.
+
+For our example, we use the `arn:aws:states:::aws-sdk:s3:getObject` integration to call the S3 `GetObject` API. The output of this state contains the contents of the file we have requested. In the Lambda function in the first example, we would unserialise the JSON contained in the file before returning it to the workflow. In this case, we split it into two steps. The first step gets the object from S3 with the serialised JSON. The second step can then use the `States.StringToJson` intrinsic function to unserialise the contents of the object.
+
+Much easier!
+
+```yaml
+Get summary file from S3:
+  Type: Task
+  Resource: arn:aws:states:::aws-sdk:s3:getObject
+  Parameters:
+    Bucket.$: $.file.bucket
+    Key.$: $.file.summaryFile
+  ResultSelector:
+    data.$: $.Body
+  ResultPath: $.summary
+  Next: Parse summary JSON string
+
+Parse summary JSON string:
+  Type: Pass
+  Parameters:
+    data.$: States.StringToJson($.summary.data)
+  ResultPath: $.summary
+  Next: Get detail file from S3
+```
+
+The same applies to the `Get detail file from S3` example below.
+
+```yaml
+Get detail file from S3:
+  Type: Task
+  Resource: arn:aws:states:::aws-sdk:s3:getObject
+  Parameters:
+    Bucket.$: $.file.bucket
+    Key.$: $.file.detailFile
+  ResultSelector:
+    data.$: $.Body
+  ResultPath: $.detail
+  Next: Parse detail JSON string
+
+Parse detail JSON string:
+  Type: Pass
+  Parameters:
+    data.$: States.StringToJson($.detail.data)
+  ResultPath: $.detail
+  Next: Merge summary and detail
+```
+
+As we near the end of the workflow, we come across another of the new instrinsic functions released recently - `States.JsonMerge`. This very much does what it says on the tin. It performs a shallow merge of one JSON object into another, in our case it merges `$.detail.data` into `$.summary.data`. This means that if there was the same key present in both, the JSON object in the second parameter of the function would take precedence. The output of this state contains a merged version of our summary and detail to give us an enriched view of all the data that came into this workflow.
+
+```yaml
+Merge summary and detail:
+  Type: Pass
+  Parameters:
+    data.$: States.JsonMerge($.summary.data, $.detail.data, false)
+  ResultPath: $.merged
+  Next: Store object
+```
+
+The final step of the workflow is to store the merged data that we've created. Much like the states where we used the S3 `GetObject` API via the SDK integration, this time we will use the `PutObject` API. 
+
+```yaml
+Store object:
+  Type: Task
+  Resource: arn:aws:states:::aws-sdk:s3:putObject
+  Parameters:
+    Bucket.$: $.file.bucket
+    Key.$: States.Format('{}-merged.json', $.ingestion.uuid)
+    Body.$: $.merged.data
+  End: true
+```
+
+## Conclusion
+
+That rounds off the migration of a Step Functions workflow from using Lambda functions to being functionless. There are some considerations to keep in mind especially when using the `GetObject` and `PutObject` APIs, such as the 256KB limit on the data that can be passed from state to state. Don't go replacing your big data ETL pipelines just yet!
+
+All of the source code that makes up this article can be found on GitHub at [https://github.com/alexkearns/aws-functionless-state-machines](https://github.com/alexkearns/aws-functionless-state-machines).
+
+I absolutely love Step Functions and I hope that this article gives you a reason to also. It's becoming a real cornerstone of the AWS serverless offerings and I expect to see lots of new features released for it over the coming months and years.

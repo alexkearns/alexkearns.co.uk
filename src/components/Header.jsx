@@ -1,12 +1,14 @@
-import Image from 'next/future/image'
+'use client'
+
+import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
 import avatarImage from '@/images/avatar.jpg'
-import { Fragment, useEffect, useRef } from 'react'
+import { Fragment } from 'react'
 
 function CloseIcon(props) {
   return (
