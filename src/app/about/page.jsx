@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
 
+import { getUrlInfo } from '@/lib/url'
 import { Container } from '@/components/Container'
 import {
   TwitterIcon,
@@ -10,14 +11,6 @@ import {
   LinkedInIcon,
 } from '@/components/Icons'
 import portraitImage from '@/images/portrait.jpg'
-
-let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-// Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
-  siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-}
-
-const { host } = new URL(siteUrl)
 
 function SocialLink({ className, href, children, icon: Icon }) {
   return (
@@ -46,7 +39,12 @@ function MailIcon(props) {
 
 export const metadata = {
   title: 'About - Alex Kearns',
-  description: "I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads."
+  description: "I’m an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.",
+  openGraph: {
+    title: "About",
+    description: "I'm an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.",
+    images: [`${getUrlInfo().siteUrl}/api/og?title=About`]
+  }
 };
 
 export default function About() {

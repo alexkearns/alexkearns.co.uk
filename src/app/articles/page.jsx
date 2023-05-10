@@ -2,12 +2,7 @@ import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { getAllArticles } from '@/lib/getArticles'
 import { formatDate } from '@/lib/formatDate'
-
-let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-// Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
-  siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-}
+import { getUrlInfo } from '@/lib/url'
 
 function Article({ article }) {
   return (
@@ -38,14 +33,19 @@ function Article({ article }) {
   )
 }
 
+const description = "My longer-form thoughts primarily focused on AWS, with a sprinkling of other stuff for good measure, collected in chronological order."
+
 export const metadata = {
   title: 'Articles - Alex Kearns',
-  description: "I'm Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads."
+  description,
+  openGraph: {
+    title: "Articles",
+    description,
+    images: [`${getUrlInfo().siteUrl}/api/og?title=Articles`]
+  }
 };
 
 export default async function ArticlesIndex() {
-  const description = "My longer-form thoughts primarily focused on AWS, with a sprinkling of other stuff for good measure, collected in chronological order."
-
   const { articles } = await getData()
 
   return (

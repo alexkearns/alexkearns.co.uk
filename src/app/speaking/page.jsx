@@ -1,5 +1,6 @@
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
+import { getUrlInfo } from '@/lib/url'
 
 import nordevcon23Image from '@/images/events/nordevcon-23.png'
 import nordevcon22Image from '@/images/events/nordevcon-22.png'
@@ -14,19 +15,13 @@ import cloudContainerConundrumImage from '@/images/events/cloud-container-conund
 import comsum22Image from '@/images/events/comsum-22.png'
 import owaspImage from '@/images/events/owasp.png'
 
-let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-// Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
-  siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-}
-
-const { host } = new URL(siteUrl)
 const eventAppearanceType = {
   CONF: 'Conference',
   TALK: 'Talk',
   STREAM: 'Live Stream',
   POD: 'Podcast'
 }
+
 const eventAppearance = [
   {
     title: "Serverless orchestration: Events, Queues, State Machines, oh my!",
@@ -179,7 +174,12 @@ function Appearance({ title, event, date, image, type, cta, href }) {
 
 export const metadata = {
   title: 'Speaking - Alex Kearns',
-  description: "I’ve spoken at all kinds of events and am always open to trying new formats."
+  description: "I’ve spoken at all kinds of events and am always open to trying new formats.",
+  openGraph: {
+    title: "Speaking",
+    description: "I’ve spoken at all kinds of events and am always open to trying new formats.",
+    images: [`${getUrlInfo().siteUrl}/api/og?title=Speaking`]
+  }
 };
 
 export default function Speaking() {
