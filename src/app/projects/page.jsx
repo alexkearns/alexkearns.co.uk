@@ -5,7 +5,7 @@ import {
 
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
-import { getUrlInfo } from '@/lib/url'
+import { getSiteUrl, getUrlForRoute } from '@/lib/url'
 
 const projects = [
   {
@@ -45,7 +45,8 @@ export const metadata = {
   openGraph: {
     title: "Projects",
     description: "Bite-sized pieces of tech goodness that's free to adapt and learn from.",
-    images: [`${getUrlInfo().siteUrl}/api/og?title=Projects`]
+    images: [`${getSiteUrl().siteUrl}/api/og?title=Projects`],
+    url: getUrlForRoute("projects")
   }
 };
 

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
 
-import { getUrlInfo } from '@/lib/url'
+import { getSiteUrl, getUrlForRoute } from '@/lib/url'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { Container } from '@/components/Container'
@@ -333,7 +333,8 @@ export const metadata = {
   openGraph: {
     title: "Alex Kearns",
     description: "I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.",
-    images: [`${getUrlInfo().siteUrl}/api/og?title=Alex Kearns`]
+    images: [`${getSiteUrl().siteUrl}/api/og?title=Alex Kearns`],
+    url: getUrlForRoute()
   }
 };
 

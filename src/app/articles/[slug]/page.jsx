@@ -1,6 +1,6 @@
 
 import { getAllArticles, getArticleBySlug } from '@/lib/getArticles'
-import { getUrlInfo } from '@/lib/url'
+import { getSiteUrl, getUrlForRoute } from '@/lib/url'
 import { ArticleLayout } from '@/components/ArticleLayout'
 
 export default async function ArticlesIndex({ params }) {
@@ -32,7 +32,8 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: article.frontmatter.title,
       description: article.frontmatter.description,
-      images: [`${getUrlInfo().siteUrl}/api/og?title=${article.frontmatter.title}&date=${article.frontmatter.date}`]
+      images: [`${getSiteUrl().siteUrl}/api/og?title=${article.frontmatter.title}&date=${article.frontmatter.date}`],
+      url: getUrlForRoute(`articles/${params.slug}`)
     }
   }
 }

@@ -2,7 +2,7 @@ import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { getAllArticles } from '@/lib/getArticles'
 import { formatDate } from '@/lib/formatDate'
-import { getUrlInfo } from '@/lib/url'
+import { getSiteUrl, getUrlForRoute } from '@/lib/url'
 
 function Article({ article }) {
   return (
@@ -41,7 +41,8 @@ export const metadata = {
   openGraph: {
     title: "Articles",
     description,
-    images: [`${getUrlInfo().siteUrl}/api/og?title=Articles`]
+    images: [`${getSiteUrl().siteUrl}/api/og?title=Articles`],
+    url: getUrlForRoute("articles")
   }
 };
 

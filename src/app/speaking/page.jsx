@@ -1,6 +1,6 @@
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
-import { getUrlInfo } from '@/lib/url'
+import { getSiteUrl, getUrlForRoute } from '@/lib/url'
 
 import nordevcon23Image from '@/images/events/nordevcon-23.png'
 import nordevcon22Image from '@/images/events/nordevcon-22.png'
@@ -178,7 +178,8 @@ export const metadata = {
   openGraph: {
     title: "Speaking",
     description: "I’ve spoken at all kinds of events and am always open to trying new formats.",
-    images: [`${getUrlInfo().siteUrl}/api/og?title=Speaking`]
+    images: [`${getSiteUrl().siteUrl}/api/og?title=Speaking`],
+    url: getUrlForRoute("speaking")
   }
 };
 
