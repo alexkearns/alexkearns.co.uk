@@ -1,0 +1,246 @@
+---
+author: 'Alex Kearns'
+date: '2023-08-02'
+title: 'Creating resources using Fn::ForEach with CloudFormation'
+description: >-
+  A look at the new CloudFormation Fn::ForEach intrinsic function and how it
+  compares to Terraform's capabilities.
+---
+
+## Introduction
+
+It's been a while since I've published a blog post as I've been busy
+experimenting with some new forms of content creation (i.e. Twitch) and settling
+into my new job. I'm back now with a look at an exciting new feature to
+CloudFormation, the `Fn::ForEach` intrinsic function.
+
+## CloudFormation
+
+For a long time, if you wanted to create multiple resources in CloudFormation
+you'd need to define them all individually. For example, take a look at the
+snippet below.
+
+```yaml
+Resources:
+	BucketOne:
+		Type: AWS::S3::Bucket
+		Properties:
+			BucketName: my-bucket-one
+
+	BucketTwo:
+		Type: AWS::S3::Bucket
+		Properties:
+			BucketName: my-bucket-two
+```
+
+Whilst there are of course advantages to this, the main one being that it's
+incredibly explicit what resources are being created, it does introduce
+repetitiveness and create inertia in the developer experience when lots of
+similar resources need to be created.
+
+Back in October 2021, the idea of an `Fn::Map` intrinsic function was proposed
+[on GitHub here](https://github.com/aws-cloudformation/cfn-language-discussion/issues/41).
+In May 2022, an official request for comment (RFC) was
+[published by AWS](https://github.com/aws-cloudformation/cfn-language-discussion/pull/75)
+attracting lots of thoughts and opinions from various members of the community.
+It's great AWS taking input from end users into account when developing new
+features. The time taken from the feature being marked as approved and it being
+released for general availability was around a month. It's always interesting to
+get a little insight to how AWS propose, plan and deliver features.
+
+The new `Fn::ForEach` intrinsic function was released on 26 July 2023
+[here](https://aws.amazon.com/about-aws/whats-new/2023/07/accelerate-cloudformation-authoring-experience-looping-function/).
+The way that it's described is "With Fn::ForEach, you can replicate parts of
+your templates with minimal lines of code". Let's dive in and take a look at how
+easy (or not) this really is.
+
+First of all, it's important to note that this new function requires the
+`AWS::LanguageExtensions` transform to be specified in the CloudFormation
+template.
+
+In it's simplest form, defining a mappable resource follows the pattern in the
+snippet below. Each loop needs to have a unique name. This is represented by the
+`{UniqueLoopName}` part of the example. Within the loop (represented as a list)
+there are three items.
+
+- Firstly, `{ValueIdentifier}` which is a string that defines the dynamic name
+  that'll be later used for referencing the iterated over value (e.g.
+  `BucketName`).
+- The second item is the list itself that'll be iterated over.
+- Finally, the last item is the resource (or resources) that should be created
+  from the list defined. The syntax for defining these resources is exactly as
+  per the normal CloudFormation resource specification with just a couple of
+  differences. Rather than specifying a static logical resource name, such as
+  `MyBucketOne`, you must use the dynamic reference name you specified to ensure
+  all resources are created with unique names. In addition, you then have access
+  to the value of the current item through the use of `!Ref {ValueIdentifier}`.
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::LanguageExtensions'
+Resources:
+  Fn::ForEach::{UniqueLoopName}:
+    - { ValueIdentifier }
+    - [...]
+    - Resource${ValueIdentifier}:
+        Type: AWS::Service::Resource
+        Properties:
+          Property: !Ref { ValueIdentifier }
+```
+
+Let's move on to building a couple of examples in CloudFormation, followed by a
+look at Terraform as an alternative.
+
+### Example one
+
+In this example, we're creating a couple of S3 buckets. This will create buckets
+named `bucketone` and `buckettwo`, both at the logical level (within
+CloudFormation) and the physical level (the bucket name).
+
+This is the most simplistic example I could think of, but to me it presents a
+problem. Typically CloudFormation logical names are CamelCase and S3 buckets can
+only have lowercase characters in their physical names. As a result, we've had
+to compromise on the logical name to meet the hard requirement imposed by the
+physical name. Annoying, huh? Keep reading to see an alternative way.
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::LanguageExtensions'
+Resources:
+  Fn::ForEach::Buckets:
+    - BucketName
+    - - bucketone
+      - buckettwo
+    - ${BucketName}:
+        Type: AWS::S3::Bucket
+        Properties:
+          BucketName: !Ref BucketName
+```
+
+### Example two
+
+In this example we're still building two S3 buckets, however this time we're
+making use of CloudFormation's 'Mappings' functionality in order to retrieve
+different values. Using the pattern below we can define values like `One` and
+`Two` to identify our buckets, then link them to physical resource names of
+`my-bucket-one` and `my-bucket-two` using the `Fn::FindInMap` intrinsic
+function. Pretty nifty.
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::LanguageExtensions'
+Mappings:
+  BucketMap:
+    One:
+      BucketName: my-bucket-one
+	Two:
+      BucketName: my-bucket-two
+Resources:
+  Fn::ForEach::Buckets:
+    - BucketNumber
+    - - One
+      - Two
+    - Bucket${BucketNumber}:
+        Type: AWS::S3::Bucket
+        Properties:
+          BucketName:
+			Fn::FindInMap: ["BucketMap", !Ref BucketNumber, "BucketName"]
+```
+
+## Terraform
+
+I'm not going to spend too much time on Terraform mainly because the focus of
+this article is the new functionality in CloudFormation, we'll take a look at
+how it compares however.
+
+At a high level, Terraform offers two features that are contenders to our
+example usage `Fn::ForEach` intrinsic function. These are the `for_each` and
+`count` meta arguments.
+
+### `for_each`
+
+The `for_each` meta argument is the closest match to CloudFormation's
+`Fn::ForEach`. It takes a map or strings as input and then creates a resource
+for each item.
+
+In the example below, we define two bucket names as a set of strings and two
+buckets as a map. From looking at the two resources, `aws_s3_bucket.buckets_set`
+and `aws_s3_bucket.buckets_map` we can see that all that's required is
+specifying `for_each` and `each.value` to access the iterated over values. In
+the case of the map, it's possible to then access nested properties such as
+`each.value.name`.
+
+```hcl
+
+locals {
+	bucket_names = set(["my-bucket-one", "my-bucket-two"])
+	buckets = {
+		three = { name = "my-bucket-three" },
+		four = { name = "my-bucket-four" }
+	}
+}
+
+resource "aws_s3_bucket" "buckets_set" {
+	for_each = local.bucket_names
+
+	bucket_name = each.value
+}
+
+resource "aws_s3_bucket" "buckets_map" {
+	for_each = local.buckets
+
+	bucket_name = each.value.name
+}
+```
+
+When you define resources in this way, you can access properties via syntax like
+`aws_s3_bucket.buckets_map["three"]`.
+
+### `count`
+
+If requirements are as simple as just creating _x_ number of resources, then
+Terraform's `count` meta argument is the one for you. This allows you to say "I
+want to create 10 S3 buckets", and make use of the count index (zero-indexed) to
+build up unique names. For an example, see the snippet below which'll create S3
+buckets names `my-bucket-1` through to `my-bucket-10`.
+
+```hcl
+locals {
+	number_of_buckets = 10
+}
+
+resource "aws_s3_bucket" "buckets" {
+	count = local.number_of_buckets
+
+	bucket_name = "my-bucket-${count.index + 1}"
+}
+```
+
+When you define resources in this way, you can access properties via the syntax
+`aws_s3_bucket.buckets_map[0]`.
+
+## Summary
+
+So, what's my overall view on this?
+
+It's great that CloudFormation now supports the dynamic creation of resources
+from a list of items. I'm sure that I'm not the only person who's been waiting
+for this for a long time. But unfortunately I think that's about as far as my
+excitement goes. Whilst functionally it does solve the problem, it just feels a
+bit messy. I don't think that's down to any fault of the AWS service team, nor
+suggestions made by the community, but rather a limitation of having to
+implement it into something YAML and JSON compatible.
+
+To me the Terraform implementation is cleaner and easier to read. For this
+reason, I'd still recommend that over CloudFormation if you're going to be
+defining lots of resources dynamically.
+
+That's all for now. I promise not to take so long until I next publish
+something, I've got a few ideas for services I'd like to explore!
+
+## Links
+
+You can find some useful related links below:
+
+- [Fn::ForEach examples - AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-foreach-examples.html)
+- [Using the for_each argument in Terraform](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each)
