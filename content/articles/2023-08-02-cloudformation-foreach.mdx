@@ -22,15 +22,13 @@ snippet below.
 
 ```yaml
 Resources:
-	BucketOne:
-		Type: AWS::S3::Bucket
-		Properties:
-			BucketName: my-bucket-one
-
-	BucketTwo:
-		Type: AWS::S3::Bucket
-		Properties:
-			BucketName: my-bucket-two
+  BucketOne:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-bucket-one
+  BucketTwo:		Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-bucket-two
 ```
 
 Whilst there are of course advantages to this, the main one being that it's
@@ -43,7 +41,7 @@ Back in October 2021, the idea of an `Fn::Map` intrinsic function was proposed
 In May 2022, an official request for comment (RFC) was
 [published by AWS](https://github.com/aws-cloudformation/cfn-language-discussion/pull/75)
 attracting lots of thoughts and opinions from various members of the community.
-It's great AWS taking input from end users into account when developing new
+It's great to see AWS taking input from end users into account when developing new
 features. The time taken from the feature being marked as approved and it being
 released for general availability was around a month. It's always interesting to
 get a little insight to how AWS propose, plan and deliver features.
@@ -173,23 +171,23 @@ the case of the map, it's possible to then access nested properties such as
 ```hcl
 
 locals {
-	bucket_names = set(["my-bucket-one", "my-bucket-two"])
-	buckets = {
-		three = { name = "my-bucket-three" },
-		four = { name = "my-bucket-four" }
-	}
+  bucket_names = set(["my-bucket-one", "my-bucket-two"])
+  buckets = {
+    three = { name = "my-bucket-three" },
+    four = { name = "my-bucket-four" }
+  }
 }
 
 resource "aws_s3_bucket" "buckets_set" {
-	for_each = local.bucket_names
+  for_each = local.bucket_names
 
-	bucket_name = each.value
+  bucket_name = each.value
 }
 
 resource "aws_s3_bucket" "buckets_map" {
-	for_each = local.buckets
+  for_each = local.buckets
 
-	bucket_name = each.value.name
+  bucket_name = each.value.name
 }
 ```
 
@@ -206,13 +204,13 @@ buckets names `my-bucket-1` through to `my-bucket-10`.
 
 ```hcl
 locals {
-	number_of_buckets = 10
+  number_of_buckets = 10
 }
 
 resource "aws_s3_bucket" "buckets" {
-	count = local.number_of_buckets
+  count = local.number_of_buckets
 
-	bucket_name = "my-bucket-${count.index + 1}"
+  bucket_name = "my-bucket-${count.index + 1}"
 }
 ```
 
