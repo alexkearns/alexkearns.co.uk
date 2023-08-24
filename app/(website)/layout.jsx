@@ -13,10 +13,13 @@ export default function RootLayout({
 }) {
   let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   // Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-  if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+  if (
+    process.env.NEXT_PUBLIC_VERCEL_ENV &&
+    process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
+  ) {
     siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   }
-  
+
   return (
     <html className="h-full antialiased" lang="en">
       {/* <Head>
@@ -35,14 +38,12 @@ export default function RootLayout({
         <Fathom />
         <div className="fixed inset-0 flex justify-center sm:px-8">
           <div className="flex w-full max-w-7xl lg:px-8">
-            <div className="w-full ring-1 bg-zinc-900 ring-zinc-300/20" />
+            <div className="w-full bg-zinc-900 ring-1 ring-zinc-300/20" />
           </div>
         </div>
         <div className="relative">
           <Header />
-          <main>
-            { children }
-          </main>
+          <main>{children}</main>
           <Footer />
         </div>
       </body>

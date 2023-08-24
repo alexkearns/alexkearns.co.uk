@@ -22,8 +22,8 @@ import logoBt from '@/images/logos/bt.png'
 import logoUbisend from '@/images/logos/ubisend.png'
 import logoInawisdom from '@/images/logos/inawisdom.jpg'
 import logoUbertas from '@/images/logos/ubertas.jpg'
-import { getAllArticles } from '@/lib/getArticles'
-import { formatDate } from '@/lib/formatDate'
+import { allArticles } from 'contentlayer/generated'
+import { compareDesc, format, parseISO } from 'date-fns'
 
 function MailIcon(props) {
   return (
@@ -87,12 +87,12 @@ function ArrowDownIcon(props) {
 function ArrowTopRightOnSquare(props) {
   return (
     <svg fill="none" viewBox="0 0 24 24" aria-hidden="true" {...props}>
-        <path 
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="1.5" 
-          d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" 
-        />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+      />
     </svg>
   )
 }
@@ -100,13 +100,11 @@ function ArrowTopRightOnSquare(props) {
 function Article({ article }) {
   return (
     <Card as="article">
-      <Card.Title href={`/articles/${article.slug}`}>
-        {article.frontmatter.title}
-      </Card.Title>
-      <Card.Eyebrow as="time" dateTime={article.frontmatter.date} decorate>
-        {formatDate(article.frontmatter.date)}
+      <Card.Title href={article.url}>{article.title}</Card.Title>
+      <Card.Eyebrow as="time" dateTime={article.date} decorate>
+        {format(parseISO(article.date), 'LLLL d, yyyy')}
       </Card.Eyebrow>
-      <Card.Description>{article.frontmatter.description}</Card.Description>
+      <Card.Description>{article.description}</Card.Description>
       <Card.Cta>Read article</Card.Cta>
     </Card>
   )
@@ -115,7 +113,7 @@ function Article({ article }) {
 function SocialLink({ icon: Icon, ...props }) {
   return (
     <Link className="group -m-1 p-1" {...props}>
-      <Icon className="h-6 w-6 transition fill-zinc-400 group-hover:fill-zinc-300" />
+      <Icon className="h-6 w-6 fill-zinc-400 transition group-hover:fill-zinc-300" />
     </Link>
   )
 }
@@ -124,7 +122,7 @@ function Newsletter() {
   return (
     <form
       action="/thank-you"
-      className="rounded-2xl border p-6 border-zinc-700/40"
+      className="rounded-2xl border border-zinc-700/40 p-6"
     >
       <h2 className="flex text-sm font-semibold text-zinc-100">
         <MailIcon className="h-6 w-6 flex-none" />
@@ -139,7 +137,7 @@ function Newsletter() {
           placeholder="Email address"
           aria-label="Email address"
           required
-          className="min-w-0 flex-auto appearance-none rounded-md border px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 focus:outline-none focus:ring-4 border-zinc-700 bg-zinc-700/[0.15] text-zinc-200 placeholder:text-zinc-500 focus:border-teal-400 focus:ring-teal-400/10 sm:text-sm"
+          className="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 bg-zinc-700/[0.15] px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
         />
         <Button type="submit" className="ml-4 flex-none">
           Join
@@ -170,11 +168,11 @@ function Achievements() {
         label: 'Present',
         dateTime: new Date().getFullYear(),
       },
-    }
+    },
   ]
 
   return (
-    <div className="rounded-2xl border p-6 border-zinc-700/40">
+    <div className="rounded-2xl border border-zinc-700/40 p-6">
       <h2 className="flex text-sm font-semibold text-zinc-100">
         <BriefcaseIcon className="h-6 w-6 flex-none" />
         <span className="ml-3">Professional Achievements</span>
@@ -182,8 +180,13 @@ function Achievements() {
       <ol className="mt-6 space-y-4">
         {achievements.map((achievement, achievementIndex) => (
           <li key={achievementIndex} className="flex gap-4">
-            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 border border-zinc-700/50 bg-zinc-800">
-              <Image src={achievement.logo} alt="" className="h-7 w-7 rounded-full" unoptimized />
+            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full border border-zinc-700/50 bg-zinc-800 shadow-md shadow-zinc-800/5">
+              <Image
+                src={achievement.logo}
+                alt=""
+                className="h-7 w-7 rounded-full"
+                unoptimized
+              />
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">Title</dt>
@@ -191,17 +194,17 @@ function Achievements() {
                 {achievement.title}
               </dd>
               <dt className="sr-only">Issuer</dt>
-              <dd className="text-xs text-zinc-400">
-                {achievement.issuer}
-              </dd>
+              <dd className="text-xs text-zinc-400">{achievement.issuer}</dd>
               <dt className="sr-only">Date</dt>
               <dd
                 className="ml-auto text-xs text-zinc-500"
-                aria-label={`${achievement.start.label ?? achievement.start} until ${
-                  achievement.end.label ?? achievement.end
-                }`}
+                aria-label={`${
+                  achievement.start.label ?? achievement.start
+                } until ${achievement.end.label ?? achievement.end}`}
               >
-                <time dateTime={achievement.start.dateTime ?? achievement.start}>
+                <time
+                  dateTime={achievement.start.dateTime ?? achievement.start}
+                >
                   {achievement.start.label ?? achievement.start}
                 </time>{' '}
                 <span aria-hidden="true">—</span>{' '}
@@ -213,7 +216,12 @@ function Achievements() {
           </li>
         ))}
       </ol>
-      <Button target="_blank" href="https://www.credly.com/users/alexkearns/badges" variant="secondary" className="group mt-6 w-full">
+      <Button
+        target="_blank"
+        href="https://www.credly.com/users/alexkearns/badges"
+        variant="secondary"
+        className="group mt-6 w-full"
+      >
         View 8x AWS Certifications
         <ArrowTopRightOnSquare className="h-4 w-4 stroke-zinc-400 transition group-hover:stroke-zinc-50 group-active:stroke-zinc-50" />
       </Button>
@@ -253,11 +261,11 @@ function Resume() {
       logo: logoUbisend,
       start: '2017',
       end: '2020',
-    }
+    },
   ]
 
   return (
-    <div className="rounded-2xl border p-6 border-zinc-700/40">
+    <div className="rounded-2xl border border-zinc-700/40 p-6">
       <h2 className="flex text-sm font-semibold text-zinc-100">
         <BriefcaseIcon className="h-6 w-6 flex-none" />
         <span className="ml-3">Work</span>
@@ -265,8 +273,13 @@ function Resume() {
       <ol className="mt-6 space-y-4">
         {resume.map((role, roleIndex) => (
           <li key={roleIndex} className="flex gap-4">
-            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 border border-zinc-700/50 bg-zinc-800">
-              <Image src={role.logo} alt="" className="h-7 w-7 rounded-full" unoptimized />
+            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full border border-zinc-700/50 bg-zinc-800 shadow-md shadow-zinc-800/5">
+              <Image
+                src={role.logo}
+                alt=""
+                className="h-7 w-7 rounded-full"
+                unoptimized
+              />
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">Company</dt>
@@ -274,9 +287,7 @@ function Resume() {
                 {role.company}
               </dd>
               <dt className="sr-only">Role</dt>
-              <dd className="text-xs text-zinc-400">
-                {role.title}
-              </dd>
+              <dd className="text-xs text-zinc-400">{role.title}</dd>
               <dt className="sr-only">Date</dt>
               <dd
                 className="ml-auto text-xs text-zinc-500"
@@ -329,17 +340,21 @@ function Photos() {
 
 export const metadata = {
   title: 'Alex Kearns',
-  description: "I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.",
+  description:
+    'I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.',
   openGraph: {
-    title: "Alex Kearns",
-    description: "I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.",
+    title: 'Alex Kearns',
+    description:
+      'I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping organisations of all sizes migrate to AWS, and modernise their workloads.',
     images: [`${getSiteUrl().siteUrl}/api/og?title=Alex Kearns`],
-    url: getUrlForRoute()
-  }
-};
+    url: getUrlForRoute(),
+  },
+}
 
 export default async function Home() {
-  const { articles } = await getData()
+  const articles = allArticles.sort((a, b) =>
+    compareDesc(new Date(a.date), new Date(b.date))
+  )
 
   return (
     <>
@@ -349,7 +364,10 @@ export default async function Home() {
             Usually found with my head in the clouds.
           </h1>
           <p className="mt-6 text-base text-zinc-400">
-            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas Consulting as a Principal Solutions Architect helping clients of all sizes to migrate their applications to AWS and modernise to make the most of cloud.
+            I’m Alex - an AWS consultant based in Ipswich, UK. I work at Ubertas
+            Consulting as a Principal Solutions Architect helping clients of all
+            sizes to migrate their applications to AWS and modernise to make the
+            most of cloud.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
@@ -380,7 +398,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
           <div className="flex flex-col gap-16">
             {articles.map((article) => (
-              <Article key={article.slug} article={article} />
+              <Article key={article.url} article={article} />
             ))}
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
@@ -391,12 +409,4 @@ export default async function Home() {
       </Container>
     </>
   )
-}
-
-async function getData() {
-  return {
-    articles: (await getAllArticles())
-      .slice(0, 4)
-      .map(({ component, ...meta }) => meta),
-  }
 }
