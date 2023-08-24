@@ -1,8 +1,12 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files'
+import highlight from 'rehype-highlight'
+import remarkGfm from 'remark-gfm'
+import highlightTerraform from './lib/highlightTerraform'
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
   filePathPattern: `./articles/**/*.mdx`,
+  contentType: 'mdx',
   fields: {
     title: { type: 'string', required: true },
     author: { type: 'string', required: true },
@@ -10,9 +14,14 @@ export const Article = defineDocumentType(() => ({
     date: { type: 'date', required: true },
   },
   computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (article) =>
+        article._raw.flattenedPath.replace(/^articles\//, ''),
+    },
     url: {
       type: 'string',
-      resolve: (article) => `/articles/${article._raw.flattenedPath}`,
+      resolve: (article) => `/${article._raw.flattenedPath}`,
     },
   },
 }))
@@ -20,4 +29,8 @@ export const Article = defineDocumentType(() => ({
 export default makeSource({
   contentDirPath: './content',
   documentTypes: [Article],
+  mdx: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [[highlight, { languages: { tf: highlightTerraform } }]],
+  },
 })

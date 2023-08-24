@@ -26,7 +26,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: my-bucket-one
-  BucketTwo:		Type: AWS::S3::Bucket
+  BucketTwo:
+    Type: AWS::S3::Bucket
     Properties:
       BucketName: my-bucket-two
 ```
@@ -41,10 +42,11 @@ Back in October 2021, the idea of an `Fn::Map` intrinsic function was proposed
 In May 2022, an official request for comment (RFC) was
 [published by AWS](https://github.com/aws-cloudformation/cfn-language-discussion/pull/75)
 attracting lots of thoughts and opinions from various members of the community.
-It's great to see AWS taking input from end users into account when developing new
-features. The time taken from the feature being marked as approved and it being
-released for general availability was around a month. It's always interesting to
-get a little insight to how AWS propose, plan and deliver features.
+It's great to see AWS taking input from end users into account when developing
+new features. The time taken from the feature being marked as approved and it
+being released for general availability was around a month. It's always
+interesting to get a little insight to how AWS propose, plan and deliver
+features.
 
 The new `Fn::ForEach` intrinsic function was released on 26 July 2023
 [here](https://aws.amazon.com/about-aws/whats-new/2023/07/accelerate-cloudformation-authoring-experience-looping-function/).
@@ -168,8 +170,7 @@ specifying `for_each` and `each.value` to access the iterated over values. In
 the case of the map, it's possible to then access nested properties such as
 `each.value.name`.
 
-```hcl
-
+```tf
 locals {
   bucket_names = set(["my-bucket-one", "my-bucket-two"])
   buckets = {
@@ -202,7 +203,7 @@ want to create 10 S3 buckets", and make use of the count index (zero-indexed) to
 build up unique names. For an example, see the snippet below which'll create S3
 buckets names `my-bucket-1` through to `my-bucket-10`.
 
-```hcl
+```tf
 locals {
   number_of_buckets = 10
 }

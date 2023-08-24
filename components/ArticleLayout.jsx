@@ -1,5 +1,6 @@
 import { Container } from '@/components/Container'
-import { formatDate } from '@/lib/formatDate'
+import { useMDXComponent } from 'next-contentlayer/hooks'
+import { format, parseISO } from 'date-fns'
 import { Prose } from '@/components/Prose'
 import Link from 'next/link'
 
@@ -16,43 +17,38 @@ function ArrowLeftIcon(props) {
   )
 }
 
-export function ArticleLayout({
-  article
-}) {
-  let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-  // Checks if it's deployed in Vercel, and not production as we set NEXT_PUBLIC_SITE_URL in production
-  if (process.env.NEXT_PUBLIC_VERCEL_ENV && process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
-    siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  }
+export function ArticleLayout({ article }) {
+  const date = format(parseISO(article.date), 'LLLL d, yyyy')
+  const Content = useMDXComponent(article.body.code)
 
   return (
     <Container className="mt-16 lg:mt-32">
       <div className="xl:relative">
         <div className="mx-auto max-w-2xl">
-          <Link href={"/articles"}>
+          <Link href={'/articles'}>
             <button
               type="button"
               aria-label="Go back to articles"
-              className="group mb-8 flex h-10 w-10 items-center justify-center rounded-full shadow-md shadow-zinc-800/5 transition border border-zinc-700/50 bg-zinc-800 hover:border-zinc-700 lg:absolute lg:-left-5 lg:mb-0 lg:-mt-2 xl:-top-1.5 xl:left-0 xl:mt-0"
+              className="group mb-8 flex h-10 w-10 items-center justify-center rounded-full border border-zinc-700/50 bg-zinc-800 shadow-md shadow-zinc-800/5 transition hover:border-zinc-700 lg:absolute lg:-left-5 lg:mb-0 lg:-mt-2 xl:-top-1.5 xl:left-0 xl:mt-0"
             >
-              <ArrowLeftIcon className="h-4 w-4 transition stroke-zinc-500 group-hover:stroke-zinc-400" />
+              <ArrowLeftIcon className="h-4 w-4 stroke-zinc-500 transition group-hover:stroke-zinc-400" />
             </button>
           </Link>
           <article>
             <header className="flex flex-col">
               <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl">
-                {article.frontmatter.title}
+                {article.title}
               </h1>
               <time
-                dateTime={article.frontmatter.date}
+                dateTime={date}
                 className="order-first flex items-center text-base text-zinc-500"
               >
                 <span className="h-4 w-0.5 rounded-full bg-zinc-500" />
-                <span className="ml-3">{formatDate(article.frontmatter.date)}</span>
+                <span className="ml-3">{date}</span>
               </time>
             </header>
             <Prose className="mt-8">
-              { article.content }
+              <Content />
             </Prose>
           </article>
         </div>

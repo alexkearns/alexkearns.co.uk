@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./{app,components,content}/**/*.{mdx,js,jsx}'],
+  content: [
+    './app/**/*.jsx',
+    './components/**/*.jsx',
+    './content/articles/**/*.mdx',
+  ],
   plugins: [require('@tailwindcss/typography')],
   theme: {
     fontSize: {

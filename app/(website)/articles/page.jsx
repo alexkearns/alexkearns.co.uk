@@ -8,7 +8,7 @@ function Article({ article }) {
   return (
     <article className="md:grid md:grid-cols-4 md:items-baseline">
       <Card className="md:col-span-3">
-        <Card.Title href={`${article.url}`}>{article.title}</Card.Title>
+        <Card.Title href={article.url}>{article.title}</Card.Title>
         <Card.Eyebrow
           as="time"
           dateTime={article.date}
@@ -58,7 +58,7 @@ export default async function ArticlesIndex() {
       <div className="md:border-l md:border-zinc-700/40 md:pl-6">
         <div className="flex max-w-3xl flex-col space-y-16">
           {articles.map((article) => (
-            <Article key={article.url} article={article} />
+            <Article key={article.slug} article={article} />
           ))}
         </div>
       </div>
