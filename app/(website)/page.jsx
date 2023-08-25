@@ -352,9 +352,9 @@ export const metadata = {
 }
 
 export default async function Home() {
-  const articles = allArticles.sort((a, b) =>
-    compareDesc(new Date(a.date), new Date(b.date))
-  )
+  const articles = allArticles
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+    .slice(0, 4)
 
   return (
     <>

@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import Image from "next/image"
+import Image from 'next/image'
 
-export default function ArticleImage({slug, image, ...props}) {
-  const importedImage = require(`../images/articles/${slug}/${image}`)
+export default function ArticleImage({ src, props }) {
+  const image = require(`../images/articles/${src}`)
   return (
-    <div className='w-full relative'>
-      <Image src={importedImage} {...props} />
+    <div className="relative h-auto w-full">
+      <Image src={image} {...props} />
     </div>
   )
 }

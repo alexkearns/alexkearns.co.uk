@@ -3,6 +3,11 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { format, parseISO } from 'date-fns'
 import { Prose } from '@/components/Prose'
 import Link from 'next/link'
+import ArticleImage from './ArticleImage'
+
+const mdxComponents = {
+  Image: (props) => <ArticleImage {...props} />,
+}
 
 function ArrowLeftIcon(props) {
   return (
@@ -48,7 +53,7 @@ export function ArticleLayout({ article }) {
               </time>
             </header>
             <Prose className="mt-8">
-              <Content />
+              <Content components={mdxComponents} />
             </Prose>
           </article>
         </div>

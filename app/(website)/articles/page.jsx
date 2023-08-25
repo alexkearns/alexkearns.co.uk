@@ -46,9 +46,9 @@ export const metadata = {
 }
 
 export default async function ArticlesIndex() {
-  const articles = allArticles
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
-    .slice(0, 4)
+  const articles = allArticles.sort((a, b) =>
+    compareDesc(new Date(a.date), new Date(b.date))
+  )
 
   return (
     <SimpleLayout
