@@ -101,6 +101,7 @@ function Article({ article }) {
   return (
     <Card as="article">
       <Card.Title href={article.url}>{article.title}</Card.Title>
+      {article.series && <Card.Tags tags={[article.series]} />}
       <Card.Eyebrow as="time" dateTime={article.date} decorate>
         {format(parseISO(article.date), 'LLLL d, yyyy')}
       </Card.Eyebrow>
@@ -233,7 +234,7 @@ function Resume() {
   let resume = [
     {
       company: 'Ubertas Consulting',
-      title: 'Principal Solutions Architect',
+      title: 'Principal SA',
       logo: logoUbertas,
       start: '2023',
       end: {

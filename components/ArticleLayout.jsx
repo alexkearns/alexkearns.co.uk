@@ -4,6 +4,8 @@ import { format, parseISO } from 'date-fns'
 import { Prose } from '@/components/Prose'
 import Link from 'next/link'
 import ArticleImage from './ArticleImage'
+import { getUrlForRoute } from '@/lib/url'
+import { allArticles } from 'contentlayer/generated'
 
 const mdxComponents = {
   Image: (props) => <ArticleImage {...props} />,
@@ -25,6 +27,10 @@ function ArrowLeftIcon(props) {
 export function ArticleLayout({ article }) {
   const date = format(parseISO(article.date), 'LLLL d, yyyy')
   const Content = useMDXComponent(article.body.code)
+
+  const series = allArticles
+    .filter((a) => a.series != undefined && a.series == article.series)
+    .sort((a, b) => a.seriesPart - b.seriesPart)
 
   return (
     <Container className="mt-16 lg:mt-32">
@@ -53,6 +59,22 @@ export function ArticleLayout({ article }) {
               </time>
             </header>
             <Prose className={['mt-8', '!prose-invert']}>
+              {series.length > 0 && (
+                <div className="w-full rounded-xl border border-zinc-400 p-4">
+                  <div className="text-lg font-semibold text-zinc-200">
+                    {article.series}
+                  </div>
+                  <ul>
+                    {series.map((a) => (
+                      <li className="mt-2 mb-2" key={a.title}>
+                        <a href={getUrlForRoute(`articles/${a.slugFlattened}`)}>
+                          {a.seriesPart}. {a.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <Content components={mdxComponents} />
             </Prose>
           </article>

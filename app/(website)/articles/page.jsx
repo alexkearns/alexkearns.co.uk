@@ -9,6 +9,7 @@ function Article({ article }) {
     <article className="md:grid md:grid-cols-4 md:items-baseline">
       <Card className="md:col-span-3">
         <Card.Title href={article.url}>{article.title}</Card.Title>
+        {article.series && <Card.Tags tags={[article.series]} />}
         <Card.Eyebrow
           as="time"
           dateTime={article.date}

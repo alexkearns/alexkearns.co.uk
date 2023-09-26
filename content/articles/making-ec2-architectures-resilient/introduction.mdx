@@ -1,10 +1,12 @@
 ---
 author: 'Alex Kearns'
 date: '2023-10-01'
-title: 'Making EC2 architectures resilient: part one'
+title: Introduction
 description:
-  'Part one of a series of articles about making EC2 architectures more
-  resilient.'
+  'An introductory post to a series of articles about making EC2 architectures
+  more resilient.'
+series: Making EC2 architectures resilient
+seriesPart: 1
 ---
 
 Sometimes there's AWS services released that sound really interesting, but you
@@ -113,6 +115,20 @@ the additional cost of extra resilience is worth it.
 Running applications with highly available and resilient architectures can be
 complex, however it's an awful lot easier than it used to be. Admittedly,
 utilising a load balancer and auto scaling group is more complex than a single
-instance. As we go through this workshop, I hope you'll realise that when done
-properly it can add significant peace of mind and actually _remove_ some of the
-maintenance overhead, even if it does make the overall solution more complex.
+instance. As we work through these articles, I hope you'll discover that when
+done properly it can add significant peace of mind and actually _remove_ some of
+the maintenance overhead, even if it does make the overall solution slightly
+more complex.
+
+## Summary
+
+In this first article, we've talked a little bit about the theory behind
+resiliency and why it's important. We've looked at the need to balance resilency
+with other factors and how that can be done.
+
+In the next article in this series, we'll move onto creating some not very
+resilient infrastructure and exploring some tools to help verify this. In the
+final article we'll discover how to make the infrastructure more resilient and
+run the same tests to prove that our work has been fruitful.
+
+Until next time!

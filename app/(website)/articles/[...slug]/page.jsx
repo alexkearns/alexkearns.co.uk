@@ -22,15 +22,18 @@ export async function generateMetadata({ params }) {
   })
   const date = format(parseISO(article.date), 'LLLL d, yyyy')
 
+  let title = article.title
+  if (article.series) {
+    title = `${title} (${article.series})`
+  }
+
   return {
-    title: `${article.title} - Alex Kearns`,
+    title: `${title} - Alex Kearns`,
     description: article.description,
     openGraph: {
       title: article.title,
       description: article.description,
-      images: [
-        `${getSiteUrl().siteUrl}/api/og?title=${article.title}&date=${date}`,
-      ],
+      images: [`${getSiteUrl().siteUrl}/api/og?title=${title}&date=${date}`],
       url: getUrlForRoute(article.slugFlattened),
     },
   }

@@ -12,6 +12,8 @@ export const Article = defineDocumentType(() => ({
     author: { type: 'string', required: true },
     description: { type: 'string', required: true },
     date: { type: 'date', required: true },
+    series: { type: 'string' },
+    seriesPart: { type: 'number' },
   },
   computedFields: {
     slugFlattened: {
