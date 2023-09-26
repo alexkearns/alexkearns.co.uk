@@ -14,10 +14,15 @@ export const Article = defineDocumentType(() => ({
     date: { type: 'date', required: true },
   },
   computedFields: {
-    slug: {
+    slugFlattened: {
       type: 'string',
       resolve: (article) =>
         article._raw.flattenedPath.replace(/^articles\//, ''),
+    },
+    slug: {
+      type: 'string',
+      resolve: (article) =>
+        article._raw.flattenedPath.replace(/^articles\//, '').split('/'),
     },
     url: {
       type: 'string',

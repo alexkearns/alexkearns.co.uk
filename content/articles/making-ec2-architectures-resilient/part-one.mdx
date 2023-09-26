@@ -1,0 +1,118 @@
+---
+author: 'Alex Kearns'
+date: '2023-10-01'
+title: 'Making EC2 architectures resilient: part one'
+description:
+  'Part one of a series of articles about making EC2 architectures more
+  resilient.'
+---
+
+Sometimes there's AWS services released that sound really interesting, but you
+never really get a chance to use them in anger. For me, AWS Fault Injection
+Simulator is one of those. It's not a shiny new service by any stretch, but one
+that has always interested me and has definitely ascended my to-try list now
+that I'm spending more and more time advising clients on building
+Well-Architected AWS applications.
+
+This series of articles will be a healthy mix of hands-on and theory.
+
+We'll learn about why resiliency is so important in modern cloud architectures
+and how to balance it with other factors. Then we'll get our hands dirty with
+AWS Fault Injection Simulator, a service that makes it easy to run scenarios
+against your deployed AWS resources that simulates a real-life failure. Perfect
+for testing out the theory!
+
+To finish up, we'll learn how to improve an AWS architecture to make it more
+resilient, re-running the same scenarios to see whether our improvements have
+helped.
+
+## Why be resilient?
+
+That's quite the loaded question. Resiliency is often associated with higher
+cost and higher complexity. That's not untrue, in order to architect for
+high-availability (HA) you often have to run redundant resources and load
+balancers. We'll explore a bit later about how to balance these, but for now
+let's talk about being resilient.
+
+A good place to start is with the AWS Well-Architected Framework. When it comes
+to architecting systems on AWS, this is always a great set of guidelines to
+benchmark yourself against. The framework is made up of 6 pillars, one of which
+is 'Reliability'. This is going to be the most relevant one for us today, but
+it's worth reviewing the others!
+
+A sweeping statement made within the Reliability pillar is:
+["Design your workload to withstand component failures."](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-your-workload-to-withstand-component-failures.html)
+
+This statement groups up 7 distinct recommendations for how to adhere to best
+practice. Those that we're going to focus on within this series of articles are:
+
+- REL11-BP01 Monitor all components of the workload to detect failures
+- REL11-BP02 Fail over to healthy resources
+- REL11-BP03 Automate healing on all layers
+
+It's all well and good understanding that this is best practice, but "it's best
+practice" isn't quite enough of a reason. To me, there's a few key reasons as to
+why architecting for HA and making your application resilient is essential.
+
+- Automatic failover reduces burden in the event of disruption
+- End users of the application have greater confidence
+- It encourages application design that enables future growth (e.g. stateless
+  applications)
+
+Let's move on to talking about about how resiliency should be balanced with
+other factors when architecting a solution.
+
+## Balancing resiliency
+
+Resiliency is a spectrum. Workloads can be considered anywhere from not
+resilient at all, to the best of the best where components automatically heal
+and fail over to healthy resources.
+
+As with anything, there's a balancing act to all of these. As you might expect,
+the most resilient solutions come with the highest cost and greatest complexity.
+Let's explore this a bit further.
+
+### Cost
+
+It's important to consider the overall picture when looking at the cost of
+resilience. It has to be expected that if the desire is to run at high levels of
+resilience, then cost will increase. For example, for automatic failover to
+happen quickly and seamlessly, multiple instances of an application need to be
+in operation. When looking at this cost and determining if it's worth it, keep
+in mind the cost of not being resilient.
+
+For example, let's take an online shop as an example. On average, this online
+shop processes £60 in transactions each minute. An instance takes 10 minutes
+from starting to being ready to serve traffic.
+
+- In scenario 1, the application is deployed on a single EC2 instance in
+  `eu-west-2a`.
+- In scenario 2, the application is deployed on two EC2 instances across
+  `eu-west-2a` and `eu-west-2b`.
+
+In both scenarios the instances are part of an auto-scaling group behind a load
+balancer that spans subnets in all 3 AZs. Let's consider that the `eu-west-2a`
+availability zone experiences network outages.
+
+In scenario 1, the single instance fails the load balancer health check and
+spins up a new instance in a healthy AZ. It is at least 10 minutes until this
+new instance is ready to serve traffic and the cost in revenue of this outage
+is >= £600.
+
+In scenario 2, the instance in `eu-west-2a` would be removed from service,
+traffic automatically redirected to the healthy instance in `eu-west-2b` (this
+is known as failover) and a new instance started in `eu-west-2c`. The cost in
+revenue of this event is limited to the amount of time it takes for the health
+check to begin failing - typically a very short time.
+
+By quantifying the financial impact of an outage, it helps to evaluate whether
+the additional cost of extra resilience is worth it.
+
+### Complexity
+
+Running applications with highly available and resilient architectures can be
+complex, however it's an awful lot easier than it used to be. Admittedly,
+utilising a load balancer and auto scaling group is more complex than a single
+instance. As we go through this workshop, I hope you'll realise that when done
+properly it can add significant peace of mind and actually _remove_ some of the
+maintenance overhead, even if it does make the overall solution more complex.

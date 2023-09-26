@@ -4,7 +4,9 @@ import { ArticleLayout } from '@/components/ArticleLayout'
 import { allArticles } from 'contentlayer/generated'
 
 export default async function Article({ params }) {
-  const article = allArticles.find((article) => article.slug === params.slug)
+  const article = allArticles.find(
+    (article) => article.slugFlattened === params.slug.join('/')
+  )
   return <ArticleLayout article={article} />
 }
 
@@ -16,7 +18,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const article = allArticles.find((article) => {
-    return article.slug === params.slug
+    return article.slugFlattened === params.slug.join('/')
   })
   const date = format(parseISO(article.date), 'LLLL d, yyyy')
 
@@ -29,7 +31,7 @@ export async function generateMetadata({ params }) {
       images: [
         `${getSiteUrl().siteUrl}/api/og?title=${article.title}&date=${date}`,
       ],
-      url: getUrlForRoute(article.slug),
+      url: getUrlForRoute(article.slugFlattened),
     },
   }
 }

@@ -52,7 +52,7 @@ export function ArticleLayout({ article }) {
                 <span className="ml-3">{date}</span>
               </time>
             </header>
-            <Prose className="mt-8">
+            <Prose className={['mt-8', '!prose-invert']}>
               <Content components={mdxComponents} />
             </Prose>
           </article>

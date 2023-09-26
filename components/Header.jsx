@@ -52,7 +52,7 @@ function MobileNavItem({ href, children }) {
 function MobileNavigation(props) {
   return (
     <Popover {...props}>
-      <Popover.Button className="group flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-lg shadow-zinc-800/5 ring-1 backdrop-blur bg-zinc-800/90 text-zinc-200 ring-white/10 hover:ring-white/20">
+      <Popover.Button className="group flex items-center rounded-full bg-zinc-800/90 px-4 py-2 text-sm font-medium text-zinc-200 shadow-lg shadow-zinc-800/5 ring-1 ring-white/10 backdrop-blur hover:ring-white/20">
         Menu
         <ChevronDownIcon className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-400" />
       </Popover.Button>
@@ -66,7 +66,7 @@ function MobileNavigation(props) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Popover.Overlay className="fixed inset-0 z-50 backdrop-blur-sm bg-black/80" />
+          <Popover.Overlay className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm" />
         </Transition.Child>
         <Transition.Child
           as={Fragment}
@@ -79,20 +79,18 @@ function MobileNavigation(props) {
         >
           <Popover.Panel
             focus
-            className="fixed inset-x-4 top-8 z-50 origin-top rounded-3xl p-8 ring-1 bg-zinc-900 ring-zinc-800"
+            className="fixed inset-x-4 top-8 z-50 origin-top rounded-3xl bg-zinc-900 p-8 ring-1 ring-zinc-800"
           >
             <div className="flex flex-row-reverse items-center justify-between">
               <Popover.Button aria-label="Close menu" className="-m-1 p-1">
                 <CloseIcon className="h-6 w-6 text-zinc-400" />
               </Popover.Button>
-              <h2 className="text-sm font-medium text-zinc-400">
-                Navigation
-              </h2>
+              <h2 className="text-sm font-medium text-zinc-400">Navigation</h2>
             </div>
             <nav className="mt-6">
-              <ul className="-my-2 divide-y text-base divide-zinc-100/5 text-zinc-300">
+              <ul className="-my-2 divide-y divide-zinc-100/5 text-base text-zinc-300">
                 <MobileNavItem href="/about">About</MobileNavItem>
-                <MobileNavItem href="/articles">Content</MobileNavItem>
+                <MobileNavItem href="/articles">Articles</MobileNavItem>
                 <MobileNavItem href="/projects">Projects</MobileNavItem>
                 <MobileNavItem href="/speaking">Speaking</MobileNavItem>
               </ul>
@@ -113,9 +111,7 @@ function NavItem({ href, children }) {
         href={href}
         className={clsx(
           'relative block px-3 py-2 transition',
-          isActive
-            ? 'text-teal-400'
-            : 'hover:text-teal-400'
+          isActive ? 'text-teal-400' : 'hover:text-teal-400'
         )}
       >
         {children}
@@ -130,9 +126,9 @@ function NavItem({ href, children }) {
 function DesktopNavigation(props) {
   return (
     <nav {...props}>
-      <ul className="flex rounded-full px-3 text-sm font-medium shadow-lg shadow-zinc-800/5 ring-1 backdrop-blur bg-zinc-800/90 text-zinc-200 ring-white/10">
+      <ul className="flex rounded-full bg-zinc-800/90 px-3 text-sm font-medium text-zinc-200 shadow-lg shadow-zinc-800/5 ring-1 ring-white/10 backdrop-blur">
         <NavItem href="/about">About</NavItem>
-        <NavItem href="/articles">Content</NavItem>
+        <NavItem href="/articles">Articles</NavItem>
         <NavItem href="/projects">Projects</NavItem>
         <NavItem href="/speaking">Speaking</NavItem>
       </ul>
@@ -140,18 +136,12 @@ function DesktopNavigation(props) {
   )
 }
 
-function clamp(number, a, b) {
-  let min = Math.min(a, b)
-  let max = Math.max(a, b)
-  return Math.min(Math.max(number, min), max)
-}
-
 function AvatarContainer({ className, ...props }) {
   return (
     <div
       className={clsx(
         className,
-        'h-10 w-10 rounded-full p-0.5 shadow-lg shadow-zinc-800/5 ring-1 backdrop-blur bg-zinc-800/90 ring-white/10'
+        'h-10 w-10 rounded-full bg-zinc-800/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-white/10 backdrop-blur'
       )}
       {...props}
     />
@@ -171,7 +161,7 @@ function Avatar({ large = false, className, ...props }) {
         alt=""
         sizes={large ? '4rem' : '2.25rem'}
         className={clsx(
-          'rounded-full object-cover bg-zinc-800',
+          'rounded-full bg-zinc-800 object-cover',
           large ? 'h-16 w-16' : 'h-9 w-9'
         )}
         priority
@@ -190,12 +180,8 @@ export function Header() {
           marginBottom: 'var(--header-mb)',
         }}
       >
-        <div
-          className="top-0 z-10 h-16 pt-6"
-        >
-          <Container
-            className="w-full"
-          >
+        <div className="top-0 z-10 h-16 pt-6">
+          <Container className="w-full">
             <div className="relative flex gap-4">
               <div className="flex flex-1">
                 <AvatarContainer>

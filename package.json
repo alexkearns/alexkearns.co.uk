@@ -11,6 +11,7 @@
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@headlessui/react": "^1.7.0",
+    "@heroicons/react": "^2.0.18",
     "@next/mdx": "^12.3.4",
     "@tailwindcss/typography": "^0.5.4",
     "@vercel/og": "^0.0.20",
