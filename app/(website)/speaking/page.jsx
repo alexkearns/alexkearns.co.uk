@@ -14,144 +14,158 @@ import ambassadorSummit22Image from '@/images/events/ambassador-summit-22.png'
 import cloudContainerConundrumImage from '@/images/events/cloud-container-conundrum.png'
 import comsum22Image from '@/images/events/comsum-22.png'
 import owaspImage from '@/images/events/owasp.png'
+import readySetCloudImage from '@/images/events/ready-set-cloud-podcast.jpeg'
 
 const eventAppearanceType = {
   CONF: 'Conference',
   TALK: 'Talk',
   STREAM: 'Live Stream',
-  POD: 'Podcast'
+  POD: 'Podcast',
 }
 
 const eventAppearance = [
   {
-    title: "Serverless orchestration: Events, Queues, State Machines, oh my!",
-    type: eventAppearanceType.CONF,
-    event: "nor(DEV):con",
+    title: 'What on earth is app modernization?',
+    type: eventAppearanceType.POD,
+    event: 'Ready, Set, Cloud! Podcast',
     image: {
-      src: nordevcon23Image
+      src: readySetCloudImage,
     },
-    date: Date.parse('23 February 2023'),
-    href: "https://www.youtube.com/watch?v=3ktFKGW8tQI",
-    cta: "Watch video"
+    date: Date.parse('30 June 2023'),
+    href: 'https://www.readysetcloud.io/podcast/13/',
+    cta: 'Listen to the podcast',
   },
   {
-    title: "The Cloud Container Conundrum",
-    type: eventAppearanceType.TALK,
-    event: "The bAWSton User Group (Boston, US)",
+    title: 'Serverless orchestration: Events, Queues, State Machines, oh my!',
+    type: eventAppearanceType.CONF,
+    event: 'nor(DEV):con',
     image: {
-      src: cloudContainerConundrumImage
+      src: nordevcon23Image,
+    },
+    date: Date.parse('23 February 2023'),
+    href: 'https://www.youtube.com/watch?v=3ktFKGW8tQI',
+    cta: 'Watch video',
+  },
+  {
+    title: 'The Cloud Container Conundrum',
+    type: eventAppearanceType.TALK,
+    event: 'The bAWSton User Group',
+    image: {
+      src: cloudContainerConundrumImage,
     },
     date: Date.parse('9 March 2023'),
-    href: "https://alexkearns-aws-community-public-storage.s3.eu-west-2.amazonaws.com/baws-user-group-the-cloud-container-conundrum.pdf",
-    cta: "View slides"
+    href: 'https://alexkearns-aws-community-public-storage.s3.eu-west-2.amazonaws.com/baws-user-group-the-cloud-container-conundrum.pdf',
+    cta: 'View slides',
   },
   {
     title: "Grab your digital swimwear, we're diving into a data lake",
     type: eventAppearanceType.CONF,
-    event: "AWS Community Summit",
+    event: 'AWS Community Summit',
     date: Date.parse('22 September 2022'),
     image: {
-      src: comsum22Image
+      src: comsum22Image,
     },
-    href: "https://alexkearns-aws-community-public-storage.s3.eu-west-2.amazonaws.com/aws-comsum-22.pdf",
-    cta: "View slides"
+    href: 'https://alexkearns-aws-community-public-storage.s3.eu-west-2.amazonaws.com/aws-comsum-22.pdf',
+    cta: 'View slides',
   },
   {
-    title: "Democratising Machine Learning for Business",
+    title: 'Democratising Machine Learning for Business',
     type: eventAppearanceType.CONF,
-    event: "nor(DEV):con",
+    event: 'nor(DEV):con',
     date: Date.parse('17 June 2022'),
     image: {
-      src: nordevcon22Image
+      src: nordevcon22Image,
     },
-    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/democratising_ml_for_business.pdf",
-    cta: "View slides"
+    href: 'https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/democratising_ml_for_business.pdf',
+    cta: 'View slides',
   },
   {
-    title: "Controlled Empowerment: A tale of two sides",
+    title: 'Controlled Empowerment: A tale of two sides',
     type: eventAppearanceType.TALK,
-    event: "AWS Ambassador EMEA Summit",
+    event: 'AWS Ambassador EMEA Summit',
     date: Date.parse('29 June 2022'),
     image: {
-      src: ambassadorSummit22Image
+      src: ambassadorSummit22Image,
     },
-    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/controlled_empowerment_a_tale_of_two_sides.pdf",
-    cta: "View slides"
+    href: 'https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/controlled_empowerment_a_tale_of_two_sides.pdf',
+    cta: 'View slides',
   },
   {
-    title: "The best practices of working securely on AWS",
+    title: 'The best practices of working securely on AWS',
     type: eventAppearanceType.TALK,
-    event: "OWASP Suffolk Chapter",
+    event: 'OWASP Suffolk Chapter',
     image: {
-      src: owaspImage
+      src: owaspImage,
     },
     date: Date.parse('29 March 2022'),
-    href: "https://www.youtube.com/watch?v=1dznfbf_gEQ",
-    cta: "Watch video"
+    href: 'https://www.youtube.com/watch?v=1dznfbf_gEQ',
+    cta: 'Watch video',
   },
   {
-    title: "Serverless: What, why, how?",
+    title: 'Serverless: What, why, how?',
     type: eventAppearanceType.TALK,
-    event: "Norfolk Developers",
+    event: 'Norfolk Developers',
     date: Date.parse('16 September 2021'),
     image: {
-      src: nordevServerlessWhatWhyHowImage
+      src: nordevServerlessWhatWhyHowImage,
     },
-    href: "https://www.youtube.com/watch?v=6hBmjYPNdnc",
-    cta: "Watch video"
+    href: 'https://www.youtube.com/watch?v=6hBmjYPNdnc',
+    cta: 'Watch video',
   },
   {
-    title: "AWS App Runner: The what, the why and the how",
+    title: 'AWS App Runner: The what, the why and the how',
     type: eventAppearanceType.TALK,
-    event: "Ipswich AWS User Group",
+    event: 'Ipswich AWS User Group',
     image: {
-      src: ipswichAwsUserGroupImage
+      src: ipswichAwsUserGroupImage,
     },
     date: Date.parse('17 June 2021'),
-    href: "https://www.youtube.com/watch?v=b1u3cFYs6fw",
-    cta: "Watch video"
+    href: 'https://www.youtube.com/watch?v=b1u3cFYs6fw',
+    cta: 'Watch video',
   },
   {
-    title: "Handling Peaks in Website Traffic",
+    title: 'Handling Peaks in Website Traffic',
     type: eventAppearanceType.TALK,
-    event: "TechEast: Tech and Toast",
+    event: 'TechEast: Tech and Toast',
     image: {
-      src: techToastColchesterImage
+      src: techToastColchesterImage,
     },
     date: Date.parse('14 February 2020'),
-    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/tech-and-toast-peaks-in-website-traffic.pdf",
-    cta: "View slides"
+    href: 'https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/tech-and-toast-peaks-in-website-traffic.pdf',
+    cta: 'View slides',
   },
   {
-    title: "What is Local Recall?",
+    title: 'What is Local Recall?',
     type: eventAppearanceType.TALK,
-    event: "TechEast: Tech and Toast",image: {
-      src: techToastNorwichImage
+    event: 'TechEast: Tech and Toast',
+    image: {
+      src: techToastNorwichImage,
     },
     date: Date.parse('22 November 2019'),
-    href: "https://www.youtube.com/watch?v=mF4cX0dINFk",
-    cta: "Watch video"
+    href: 'https://www.youtube.com/watch?v=mF4cX0dINFk',
+    cta: 'Watch video',
   },
   {
-    title: "What is a chatbot?",
+    title: 'What is a chatbot?',
     type: eventAppearanceType.TALK,
-    event: "UEA Moneyhack",image: {
-      src: ueaMoneyhackImage
+    event: 'UEA Moneyhack',
+    image: {
+      src: ueaMoneyhackImage,
     },
     date: Date.parse('16 November 2019'),
-    href: "https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/uea-moneyhack.pdf",
-    cta: "View slides"
+    href: 'https://ak-ambassador-public-storage.s3.eu-west-2.amazonaws.com/uea-moneyhack.pdf',
+    cta: 'View slides',
   },
   {
-    title: "Brewing a serverless application",
+    title: 'Brewing a serverless application',
     type: eventAppearanceType.STREAM,
-    event: "Norfolk Developers",
+    event: 'Norfolk Developers',
     image: {
       src: nordevServerlessStreamImage,
     },
     date: Date.parse('23 March 2022'),
-    href: "https://www.youtube.com/playlist?list=PLc8-tQY65nvVLAKiHuLLyQxnw7dgNxJ43",
-    cta: "Watch stream recording"
+    href: 'https://www.youtube.com/playlist?list=PLc8-tQY65nvVLAKiHuLLyQxnw7dgNxJ43',
+    cta: 'Watch stream recording',
   },
 ]
 
@@ -163,10 +177,15 @@ function Appearance({ title, event, date, image, type, cta, href }) {
       </Card.Title>
       <Card.Eyebrow as="div" decorate>
         <div>{event}</div>
-        <div>{new Date(date).toLocaleDateString("en-GB")}</div>
+        <div>{new Date(date).toLocaleDateString('en-GB')}</div>
       </Card.Eyebrow>
       <Card.Tags tags={[type]} />
-      {image && <><div className={"flex-1"} /><Card.Image src={image.src} alt={image.alt}/></>}
+      {image && (
+        <>
+          <div className={'flex-1'} />
+          <Card.Image src={image.src} alt={image.alt} />
+        </>
+      )}
       <Card.Cta>{cta}</Card.Cta>
     </Card>
   )
@@ -174,14 +193,16 @@ function Appearance({ title, event, date, image, type, cta, href }) {
 
 export const metadata = {
   title: 'Speaking - Alex Kearns',
-  description: "I’ve spoken at all kinds of events and am always open to trying new formats.",
+  description:
+    'I’ve spoken at all kinds of events and am always open to trying new formats.',
   openGraph: {
-    title: "Speaking",
-    description: "I’ve spoken at all kinds of events and am always open to trying new formats.",
+    title: 'Speaking',
+    description:
+      'I’ve spoken at all kinds of events and am always open to trying new formats.',
     images: [`${getSiteUrl().siteUrl}/api/og?title=Speaking`],
-    url: getUrlForRoute("speaking")
-  }
-};
+    url: getUrlForRoute('speaking'),
+  },
+}
 
 export default function Speaking() {
   return (
@@ -194,12 +215,11 @@ export default function Speaking() {
           role="list"
           className="grid grid-cols-1 gap-x-16 gap-y-20 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {eventAppearance.sort((a,b) => b.date-a.date).map((appearance, key) =>
-            <Appearance
-              key={key}
-              {...appearance}
-            />
-          )}
+          {eventAppearance
+            .sort((a, b) => b.date - a.date)
+            .map((appearance, key) => (
+              <Appearance key={key} {...appearance} />
+            ))}
         </ul>
       </SimpleLayout>
     </>
